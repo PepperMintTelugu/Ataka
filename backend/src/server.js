@@ -4,7 +4,7 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import compression from "compression";
 import mongoSanitize from "express-mongo-sanitize";
-import xss from "xss-clean";
+import xss from "xss";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";

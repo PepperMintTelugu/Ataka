@@ -139,7 +139,7 @@ const mockBooks: Book[] = [
     author: "Kandukuri Veeresalingam",
     authorTelugu: "కందుకూరి వీరేశలింగం",
     publisher: "Saraswati Pustakalayam",
-    publisherTelugu: "సరస్వతి పుస్తకాలయం",
+    publisherTelugu: "సరస్వతి పుస్తకాలయ��",
     category: "Literature",
     price: 350,
     originalPrice: 400,
@@ -256,7 +256,7 @@ const mockBooks: Book[] = [
     descriptionTelugu:
       "అందమైన తెలుగ�� పద్యంలో రామాయణం యొక్క విస్తృత వర్ణన, ఆధునిక కాలపు క్లాసిక్��గా పరిగణించబడుతుంది.",
     coverImage:
-      "https://via.placeholder.com/400x600/10b981/white?text=రామ���యణ+కల్పవృక్షం",
+      "https://via.placeholder.com/400x600/10b981/white?text=రామ���యణ+కల్పవృ���్షం",
     images: [
       "https://via.placeholder.com/400x600/10b981/white?text=రామాయణ+కల్పవృక్షం",
     ],
@@ -398,7 +398,7 @@ export default function BooksManager({ onUploadImage }: BooksManagerProps) {
     }
   };
 
-  const handleAddBook = () => {
+  const handleAddBook = async () => {
     if (
       !newBook.title ||
       !newBook.author ||
@@ -423,13 +423,39 @@ export default function BooksManager({ onUploadImage }: BooksManagerProps) {
       return;
     }
 
-    const book: Book = {
-      ...newBook,
-      id: Date.now().toString(),
-      addedDate: new Date().toISOString().split("T")[0],
-    };
+    try {
+      const response = await apiClient.createBook({
+        ...newBook,
+        addedDate: new Date().toISOString().split("T")[0],
+      });
 
-    setBooks([...books, book]);
+      if (response.success && response.data) {
+        setBooks([...books, response.data]);
+        toast({
+          title: "Success",
+          description: "Book added successfully!",
+        });
+      } else {
+        throw new Error(response.message || 'Failed to add book');
+      }
+    } catch (error: any) {
+      console.error('Failed to add book:', error);
+      // Fallback to local state update
+      const book: Book = {
+        ...newBook,
+        id: Date.now().toString(),
+        addedDate: new Date().toISOString().split("T")[0],
+      };
+      setBooks([...books, book]);
+
+      toast({
+        title: "Warning",
+        description: "Book added locally. Backend connection failed.",
+        variant: "default",
+      });
+    }
+
+    // Reset form
     setNewBook({
       title: "",
       titleTelugu: "",
@@ -459,33 +485,64 @@ export default function BooksManager({ onUploadImage }: BooksManagerProps) {
       dimensions: { length: 0, width: 0, height: 0 },
     });
     setIsAddingBook(false);
-
-    toast({
-      title: "Success",
-      description: "Book added successfully!",
-    });
   };
 
-  const handleEditBook = () => {
+  const handleEditBook = async () => {
     if (!editingBook) return;
 
-    setBooks(
-      books.map((book) => (book.id === editingBook.id ? editingBook : book)),
-    );
-    setEditingBook(null);
+    try {
+      const response = await apiClient.updateBook(editingBook.id, editingBook);
 
-    toast({
-      title: "Success",
-      description: "Book updated successfully!",
-    });
+      if (response.success && response.data) {
+        setBooks(
+          books.map((book) => (book.id === editingBook.id ? response.data : book)),
+        );
+        toast({
+          title: "Success",
+          description: "Book updated successfully!",
+        });
+      } else {
+        throw new Error(response.message || 'Failed to update book');
+      }
+    } catch (error: any) {
+      console.error('Failed to update book:', error);
+      // Fallback to local state update
+      setBooks(
+        books.map((book) => (book.id === editingBook.id ? editingBook : book)),
+      );
+      toast({
+        title: "Warning",
+        description: "Book updated locally. Backend connection failed.",
+        variant: "default",
+      });
+    }
+
+    setEditingBook(null);
   };
 
-  const handleDeleteBook = (id: string) => {
-    setBooks(books.filter((book) => book.id !== id));
-    toast({
-      title: "Success",
-      description: "Book deleted successfully!",
-    });
+  const handleDeleteBook = async (id: string) => {
+    try {
+      const response = await apiClient.deleteBook(id);
+
+      if (response.success) {
+        setBooks(books.filter((book) => book.id !== id));
+        toast({
+          title: "Success",
+          description: "Book deleted successfully!",
+        });
+      } else {
+        throw new Error(response.message || 'Failed to delete book');
+      }
+    } catch (error: any) {
+      console.error('Failed to delete book:', error);
+      // Fallback to local state update
+      setBooks(books.filter((book) => book.id !== id));
+      toast({
+        title: "Warning",
+        description: "Book deleted locally. Backend connection failed.",
+        variant: "default",
+      });
+    }
   };
 
   const toggleBookStatus = (id: string) => {

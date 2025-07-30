@@ -44,6 +44,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { ImageUpload } from "./ImageUpload";
+import { apiClient } from "@/lib/api";
 
 interface Book {
   id: string;
@@ -149,7 +150,7 @@ const mockBooks: Book[] = [
     description:
       "The first Telugu novel that brought social reform and highlighted the issues of child marriage and dowry system.",
     descriptionTelugu:
-      "సామాజిక సంస్కరణలను తీసుకువచ్చిన మరియు బాల్యవివాహాలు, కన్యాశుల్క సమస్యలను వెలికితీసిన మొదటి తెలుగు నవల.",
+      "సామాజిక సంస్కరణలను తీసుకువచ్చిన మరియు ��ాల్యవివాహాలు, కన్యాశుల్క సమస్యలను వెలికితీసిన మొదటి తెలుగు నవల.",
     coverImage:
       "https://via.placeholder.com/400x600/8b5cf6/white?text=కన్యాశుల్కం",
     images: [
@@ -241,7 +242,7 @@ const mockBooks: Book[] = [
     title: "Ramayana Kalpavruksham",
     titleTelugu: "రామాయణ కల్పవృక్షం",
     author: "Viswanatha Satyanarayana",
-    authorTelugu: "విశ్వనాథ సత్యనారాయ��",
+    authorTelugu: "విశ్వనాథ సత్యనా���ాయ��",
     publisher: "Telugu University Press",
     publisherTelugu: "తెలుగు విశ్వవిద్యాలయం ప్రెస్",
     category: "Devotional",
@@ -273,7 +274,8 @@ const mockBooks: Book[] = [
 ];
 
 export default function BooksManager({ onUploadImage }: BooksManagerProps) {
-  const [books, setBooks] = useState<Book[]>(mockBooks);
+  const [books, setBooks] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(true);
   const [isAddingBook, setIsAddingBook] = useState(false);
   const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
   const [editingBook, setEditingBook] = useState<Book | null>(null);
@@ -281,6 +283,40 @@ export default function BooksManager({ onUploadImage }: BooksManagerProps) {
   const [filterCategory, setFilterCategory] = useState("all");
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
+
+  // Load books from API on component mount
+  useEffect(() => {
+    loadBooks();
+  }, []);
+
+  const loadBooks = async () => {
+    try {
+      setLoading(true);
+      const response = await apiClient.getBooks();
+      if (response.success && response.data) {
+        setBooks(response.data);
+      } else {
+        // Fallback to mock data if API fails
+        setBooks(mockBooks);
+        toast({
+          title: "Warning",
+          description: "Using sample data. Connect to backend for real data.",
+          variant: "default",
+        });
+      }
+    } catch (error) {
+      console.error('Failed to load books:', error);
+      // Fallback to mock data
+      setBooks(mockBooks);
+      toast({
+        title: "Backend Connection Failed",
+        description: "Using sample data. Please check backend server.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const [newBook, setNewBook] = useState<Omit<Book, "id" | "addedDate">>({
     title: "",

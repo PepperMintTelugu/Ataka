@@ -1,0 +1,57 @@
+{
+  "name": "ataka-platform",
+  "version": "1.0.0",
+  "description": "Ataka - The Ultimate Bookstore - Complete online bookstore for Telugu literature with separate frontend and backend",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "install:all": "npm install && npm install --workspace=frontend && npm install --workspace=backend",
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:backend": "npm run dev --workspace=backend",
+    "build": "npm run build --workspace=frontend",
+    "build:prod": "npm run build:prod --workspace=frontend",
+    "start": "npm run start --workspace=backend",
+    "start:frontend": "npm run preview --workspace=frontend",
+    "start:backend": "npm run start --workspace=backend",
+    "test": "npm run test --workspace=frontend",
+    "test:backend": "npm run test --workspace=backend",
+    "lint": "npm run lint --workspace=frontend",
+    "format": "npm run format --workspace=frontend",
+    "typecheck": "npm run typecheck --workspace=frontend",
+    "clean": "rm -rf frontend/node_modules backend/node_modules frontend/dist",
+    "deploy:build": "npm run build:prod --workspace=frontend",
+    "deploy:prepare": "chmod +x deploy-production.sh && chmod +x build-production.js",
+    "test:db": "cd backend && node test-db.js",
+    "start:dev": "node start-dev.js"
+  },
+  "keywords": [
+    "telugu",
+    "books",
+    "ecommerce",
+    "literature",
+    "online-store",
+    "react",
+    "typescript",
+    "nodejs",
+    "mongodb",
+    "express"
+  ],
+  "author": "Telugu Books Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "your-repository-url"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

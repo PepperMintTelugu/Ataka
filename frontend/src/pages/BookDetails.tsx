@@ -44,6 +44,7 @@ export default function BookDetails() {
   const { id } = useParams<{ id: string }>();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const navigate = useNavigate();
 
   const book = id ? getBookById(id) : null;
   const { addToCart } = useCart();

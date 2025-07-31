@@ -12,6 +12,7 @@ import { Wishlist } from "@/components/Wishlist";
 import { Footer } from "@/components/Footer";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import IndexCustomizable from "./pages/IndexCustomizable";
 import Shop from "./pages/Shop";
 import BookDetails from "./pages/BookDetails";

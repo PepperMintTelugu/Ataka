@@ -194,13 +194,114 @@ export function useApp() {
 export function useCart() {
   const { state, dispatch } = useApp();
 
-  const addToCart = (book: Book) =>
+  const addToCart = async (book: Book) => {
     dispatch({ type: "ADD_TO_CART", payload: book });
-  const removeFromCart = (bookId: string) =>
+
+    // Sync with backend if user is logged in
+    if (state.user) {
+      try {
+        await apiClient.saveCart(state.cart.map(item => ({
+          bookId: item.book.id,
+          quantity: item.quantity,
+          price: item.book.price,
+          title: item.book.title,
+          image: item.book.coverImage
+        })));
+      } catch (error) {
+        console.error('Failed to sync cart with backend:', error);
+      }
+    }
+  };
+
+  const removeFromCart = async (bookId: string) => {
     dispatch({ type: "REMOVE_FROM_CART", payload: bookId });
-  const updateQuantity = (bookId: string, quantity: number) =>
+
+    // Sync with backend if user is logged in
+    if (state.user) {
+      try {
+        const updatedCart = state.cart.filter(item => item.book.id !== bookId);
+        await apiClient.saveCart(updatedCart.map(item => ({
+          bookId: item.book.id,
+          quantity: item.quantity,
+          price: item.book.price,
+          title: item.book.title,
+          image: item.book.coverImage
+        })));
+      } catch (error) {
+        console.error('Failed to sync cart with backend:', error);
+      }
+    }
+  };
+
+  const updateQuantity = async (bookId: string, quantity: number) => {
     dispatch({ type: "UPDATE_CART_QUANTITY", payload: { bookId, quantity } });
-  const clearCart = () => dispatch({ type: "CLEAR_CART" });
+
+    // Sync with backend if user is logged in
+    if (state.user) {
+      try {
+        const updatedCart = state.cart.map(item =>
+          item.book.id === bookId ? { ...item, quantity } : item
+        ).filter(item => item.quantity > 0);
+
+        await apiClient.saveCart(updatedCart.map(item => ({
+          bookId: item.book.id,
+          quantity: item.quantity,
+          price: item.book.price,
+          title: item.book.title,
+          image: item.book.coverImage
+        })));
+      } catch (error) {
+        console.error('Failed to sync cart with backend:', error);
+      }
+    }
+  };
+
+  const clearCart = async () => {
+    dispatch({ type: "CLEAR_CART" });
+
+    // Clear backend cart if user is logged in
+    if (state.user) {
+      try {
+        await apiClient.saveCart([]);
+      } catch (error) {
+        console.error('Failed to clear cart on backend:', error);
+      }
+    }
+  };
+
+  const syncCart = async () => {
+    if (!state.user) return;
+
+    try {
+      const response = await apiClient.syncCart(state.cart.map(item => ({
+        bookId: item.book.id,
+        quantity: item.quantity,
+        price: item.book.price,
+        title: item.book.title,
+        image: item.book.coverImage
+      })));
+
+      if (response.success && response.data) {
+        // Transform backend cart data to local format
+        const syncedCart = response.data.map((item: any) => ({
+          book: {
+            id: item.bookId,
+            title: item.title,
+            price: item.price,
+            coverImage: item.image,
+            // Add other required book properties
+          },
+          quantity: item.quantity,
+          addedAt: new Date()
+        }));
+
+        dispatch({ type: "SYNC_CART", payload: syncedCart });
+      }
+    } catch (error) {
+      console.error('Failed to sync cart:', error);
+    }
+  };
+
   const toggleCart = () => dispatch({ type: "TOGGLE_CART" });
   const closeCart = () => dispatch({ type: "CLOSE_CART" });
 
@@ -220,6 +321,7 @@ export function useCart() {
     removeFromCart,
     updateQuantity,
     clearCart,
+    syncCart,
     toggleCart,
     closeCart,
     cartTotal,

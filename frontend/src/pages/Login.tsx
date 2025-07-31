@@ -328,6 +328,19 @@ export default function Login() {
     try {
       setIsLoading(true);
 
+      // Check if it's admin credentials first
+      const isAdminLogin = await adminLogin(email, password);
+
+      if (isAdminLogin) {
+        toast({
+          title: "Admin Access Granted",
+          description: "Successfully signed in as administrator",
+        });
+        navigate("/admin");
+        return;
+      }
+
+      // If not admin, try customer login
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: {

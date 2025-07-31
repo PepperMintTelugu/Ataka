@@ -48,14 +48,12 @@ const App = () => (
       <ThemeProvider>
         <AppProvider>
           <AdminAuthProvider>
-            <Toaster />
-            <Sonner />
-          <BrowserRouter>
-            <ScrollToTop />
-            <div className="flex flex-col min-h-screen">
-              <Navigation />
-              <Cart />
-              <Wishlist />
+            <BrowserRouter>
+              <ScrollToTop />
+              <div className="flex flex-col min-h-screen">
+                <Navigation />
+                <Cart />
+                <Wishlist />
 
               <main className="flex-1 pb-16 lg:pb-0">
                 <Routes>

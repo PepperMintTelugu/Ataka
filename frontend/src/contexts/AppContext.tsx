@@ -159,10 +159,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, [state.cart]);
 
   useEffect(() => {
-    localStorage.setItem(
-      "ataka-wishlist",
-      JSON.stringify(state.wishlist),
-    );
+    localStorage.setItem("ataka-wishlist", JSON.stringify(state.wishlist));
   }, [state.wishlist]);
 
   return (

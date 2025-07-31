@@ -75,7 +75,7 @@ export default function BookDetails() {
       addToCart(book);
     }
     // Then redirect to checkout
-    navigate('/checkout');
+    navigate("/checkout");
   };
 
   const handleToggleWishlist = () => {

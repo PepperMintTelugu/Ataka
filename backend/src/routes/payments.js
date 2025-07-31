@@ -90,6 +90,14 @@ router.post(
         });
       }
 
+      // Check if Razorpay is available
+      if (!razorpay) {
+        return res.status(503).json({
+          success: false,
+          message: "Payment service temporarily unavailable. Please try again later.",
+        });
+      }
+
       // Create Razorpay order
       const razorpayOrder = await razorpay.orders.create({
         amount: Math.round(amount * 100), // Convert to paise

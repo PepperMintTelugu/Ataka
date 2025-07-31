@@ -78,6 +78,8 @@ function appReducer(state: AppState, action: AppAction): AppState {
       };
     case "CLEAR_CART":
       return { ...state, cart: [] };
+    case "SYNC_CART":
+      return { ...state, cart: action.payload };
     case "ADD_TO_WISHLIST": {
       const exists = state.wishlist.find(
         (item) => item.book.id === action.payload.id,

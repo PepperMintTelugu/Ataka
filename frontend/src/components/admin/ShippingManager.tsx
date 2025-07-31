@@ -435,32 +435,62 @@ export default function ShippingManager() {
 
   const syncWithShiprocket = async () => {
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setIsSyncing(true);
 
-      // Update shipment statuses randomly for demo
-      const updatedShipments = shipments.map((shipment) => {
-        if (shipment.status === "pending") {
-          return {
-            ...shipment,
-            status: "picked_up" as const,
-            pickupDate: new Date().toISOString(),
-          };
+      // Sync with actual Shiprocket API via backend
+      const promises = shipments.map(async (shipment) => {
+        if (shipment.awbNumber) {
+          try {
+            const trackingResponse = await apiClient.trackShipment(shipment.awbNumber);
+            if (trackingResponse.success && trackingResponse.data) {
+              return {
+                ...shipment,
+                status: trackingResponse.data.status,
+                trackingEvents: trackingResponse.data.history || shipment.trackingEvents,
+              };
+            }
+          } catch (error) {
+            console.error(`Failed to track shipment ${shipment.awbNumber}:`, error);
+          }
         }
         return shipment;
       });
 
+      const updatedShipments = await Promise.all(promises);
       setShipments(updatedShipments);
-      alert("Sync completed successfully!");
+
+      toast({
+        title: "Sync Successful",
+        description: "Shipment statuses updated from Shiprocket.",
+      });
     } catch (error) {
-      alert("Sync failed. Please try again.");
+      console.error("Sync failed:", error);
+      toast({
+        title: "Sync Failed",
+        description: "Failed to sync with Shiprocket. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSyncing(false);
     }
   };
 
-  const saveSettings = () => {
-    // In production, this would save to backend
-    alert("Settings saved successfully!");
-    setShowSettings(false);
+  const saveSettings = async () => {
+    try {
+      await apiClient.updateSettings({ shipping: settings });
+      toast({
+        title: "Settings Saved",
+        description: "Shipping settings updated successfully.",
+      });
+      setShowSettings(false);
+    } catch (error) {
+      console.error("Failed to save settings:", error);
+      toast({
+        title: "Save Failed",
+        description: "Failed to save settings. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const totalShipments = shipments.length;

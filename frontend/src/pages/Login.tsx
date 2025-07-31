@@ -370,7 +370,7 @@ export default function Login() {
       console.error("Login error:", error);
       toast({
         title: "Sign In Failed",
-        description: error.message || "Invalid email or password",
+        description: error.message || "Invalid credentials",
         variant: "destructive",
       });
     } finally {

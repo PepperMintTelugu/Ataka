@@ -37,6 +37,7 @@ import { BookPreview } from "@/components/BookPreview";
 import { DeliveryEstimation } from "@/components/DeliveryEstimation";
 import { getAuthorPath, getPublisherPath } from "@/utils/slugify";
 import { cn } from "@/lib/utils";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
 
 export default function BookDetails() {
   const { id } = useParams<{ id: string }>();

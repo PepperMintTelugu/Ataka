@@ -10,6 +10,7 @@ export function MobileBottomNav() {
   const location = useLocation();
   const { itemCount, toggleCart } = useCart();
   const { wishlist, toggleWishlist } = useWishlist();
+  const { scrollDirection, isScrolled } = useScrollDirection(100);
 
   const isActive = (path: string) => {
     if (path === "/") {

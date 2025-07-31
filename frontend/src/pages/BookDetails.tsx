@@ -716,6 +716,50 @@ export default function BookDetails() {
           </div>
         )}
       </div>
+
+      {/* Mobile Sticky Bottom Action Bar */}
+      {book.inStock && (
+        <div className="lg:hidden fixed bottom-16 left-0 right-0 z-40 bg-white border-t shadow-lg">
+          <div className="container mx-auto px-4 py-3">
+            <div className="grid grid-cols-2 gap-3">
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={handleAddToCart}
+                className="flex-1 h-12 touch-manipulation border-brand-500 text-brand-500 hover:bg-brand-50"
+              >
+                <ShoppingCart className="w-5 h-5 mr-2" />
+                Add to Cart
+              </Button>
+              <Button
+                size="lg"
+                onClick={handleAddToCart}
+                className="flex-1 h-12 touch-manipulation bg-brand-500 hover:bg-brand-600"
+              >
+                <Package className="w-5 h-5 mr-2" />
+                Buy Now
+              </Button>
+            </div>
+
+            {/* Price Display */}
+            <div className="flex items-center justify-center mt-2 space-x-2">
+              <span className="text-lg font-bold text-brand-600">
+                ₹{book.price}
+              </span>
+              {book.originalPrice && (
+                <span className="text-sm text-gray-500 line-through">
+                  ₹{book.originalPrice}
+                </span>
+              )}
+              {discountPercentage > 0 && (
+                <span className="text-sm font-medium text-green-600">
+                  {discountPercentage}% off
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

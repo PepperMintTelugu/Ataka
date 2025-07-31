@@ -371,6 +371,7 @@ export default function BookDetails() {
                   <Button
                     variant="outline"
                     size="lg"
+                    onClick={handleBuyNow}
                     className="w-full h-12 touch-manipulation"
                   >
                     <Package className="w-5 h-5 mr-2" />
@@ -648,7 +649,7 @@ export default function BookDetails() {
                         <ul className="text-sm text-gray-600 space-y-1">
                           <li>• Orders above ₹299 across India</li>
                           <li>• No minimum order for metro cities</li>
-                          <li>��� Covers all pin codes</li>
+                          <li>• Covers all pin codes</li>
                         </ul>
                       </div>
 

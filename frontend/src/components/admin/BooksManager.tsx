@@ -44,6 +44,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { ImageUpload } from "./ImageUpload";
+import { apiClient } from "@/lib/api";
 
 interface Book {
   id: string;
@@ -138,7 +139,7 @@ const mockBooks: Book[] = [
     author: "Kandukuri Veeresalingam",
     authorTelugu: "కందుకూరి వీరేశలింగం",
     publisher: "Saraswati Pustakalayam",
-    publisherTelugu: "సరస్వతి పుస్తకాలయం",
+    publisherTelugu: "సరస్వతి పుస్తకాలయ��",
     category: "Literature",
     price: 350,
     originalPrice: 400,
@@ -149,7 +150,7 @@ const mockBooks: Book[] = [
     description:
       "The first Telugu novel that brought social reform and highlighted the issues of child marriage and dowry system.",
     descriptionTelugu:
-      "సామాజిక సంస్కరణలను తీసుకువచ్చిన మరియు బాల్యవివాహాలు, కన్యాశుల్క సమస్యలను వెలికితీసిన మొదటి తెలుగు నవల.",
+      "సామాజిక సంస్కరణలను తీసుకువచ్చిన మరియు ��ాల్యవివాహాలు, కన్యాశుల్క సమస్యలను వెలికితీసిన మొదటి తెలుగు నవల.",
     coverImage:
       "https://via.placeholder.com/400x600/8b5cf6/white?text=కన్యాశుల్కం",
     images: [
@@ -241,7 +242,7 @@ const mockBooks: Book[] = [
     title: "Ramayana Kalpavruksham",
     titleTelugu: "రామాయణ కల్పవృక్షం",
     author: "Viswanatha Satyanarayana",
-    authorTelugu: "విశ్వనాథ సత్యనారాయ��",
+    authorTelugu: "విశ్వనాథ సత్యనా���ాయ��",
     publisher: "Telugu University Press",
     publisherTelugu: "తెలుగు విశ్వవిద్యాలయం ప్రెస్",
     category: "Devotional",
@@ -255,7 +256,7 @@ const mockBooks: Book[] = [
     descriptionTelugu:
       "అందమైన తెలుగ�� పద్యంలో రామాయణం యొక్క విస్తృత వర్ణన, ఆధునిక కాలపు క్లాసిక్��గా పరిగణించబడుతుంది.",
     coverImage:
-      "https://via.placeholder.com/400x600/10b981/white?text=రామ���యణ+కల్పవృక్షం",
+      "https://via.placeholder.com/400x600/10b981/white?text=రామ���యణ+కల్పవృ���్షం",
     images: [
       "https://via.placeholder.com/400x600/10b981/white?text=రామాయణ+కల్పవృక్షం",
     ],
@@ -273,7 +274,8 @@ const mockBooks: Book[] = [
 ];
 
 export default function BooksManager({ onUploadImage }: BooksManagerProps) {
-  const [books, setBooks] = useState<Book[]>(mockBooks);
+  const [books, setBooks] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(true);
   const [isAddingBook, setIsAddingBook] = useState(false);
   const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
   const [editingBook, setEditingBook] = useState<Book | null>(null);
@@ -281,6 +283,40 @@ export default function BooksManager({ onUploadImage }: BooksManagerProps) {
   const [filterCategory, setFilterCategory] = useState("all");
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
+
+  // Load books from API on component mount
+  useEffect(() => {
+    loadBooks();
+  }, []);
+
+  const loadBooks = async () => {
+    try {
+      setLoading(true);
+      const response = await apiClient.getBooks();
+      if (response.success && response.data) {
+        setBooks(response.data);
+      } else {
+        // Fallback to mock data if API fails
+        setBooks(mockBooks);
+        toast({
+          title: "Warning",
+          description: "Using sample data. Connect to backend for real data.",
+          variant: "default",
+        });
+      }
+    } catch (error) {
+      console.error('Failed to load books:', error);
+      // Fallback to mock data
+      setBooks(mockBooks);
+      toast({
+        title: "Backend Connection Failed",
+        description: "Using sample data. Please check backend server.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const [newBook, setNewBook] = useState<Omit<Book, "id" | "addedDate">>({
     title: "",
@@ -362,7 +398,7 @@ export default function BooksManager({ onUploadImage }: BooksManagerProps) {
     }
   };
 
-  const handleAddBook = () => {
+  const handleAddBook = async () => {
     if (
       !newBook.title ||
       !newBook.author ||
@@ -387,13 +423,39 @@ export default function BooksManager({ onUploadImage }: BooksManagerProps) {
       return;
     }
 
-    const book: Book = {
-      ...newBook,
-      id: Date.now().toString(),
-      addedDate: new Date().toISOString().split("T")[0],
-    };
+    try {
+      const response = await apiClient.createBook({
+        ...newBook,
+        addedDate: new Date().toISOString().split("T")[0],
+      });
 
-    setBooks([...books, book]);
+      if (response.success && response.data) {
+        setBooks([...books, response.data]);
+        toast({
+          title: "Success",
+          description: "Book added successfully!",
+        });
+      } else {
+        throw new Error(response.message || 'Failed to add book');
+      }
+    } catch (error: any) {
+      console.error('Failed to add book:', error);
+      // Fallback to local state update
+      const book: Book = {
+        ...newBook,
+        id: Date.now().toString(),
+        addedDate: new Date().toISOString().split("T")[0],
+      };
+      setBooks([...books, book]);
+
+      toast({
+        title: "Warning",
+        description: "Book added locally. Backend connection failed.",
+        variant: "default",
+      });
+    }
+
+    // Reset form
     setNewBook({
       title: "",
       titleTelugu: "",
@@ -423,33 +485,64 @@ export default function BooksManager({ onUploadImage }: BooksManagerProps) {
       dimensions: { length: 0, width: 0, height: 0 },
     });
     setIsAddingBook(false);
-
-    toast({
-      title: "Success",
-      description: "Book added successfully!",
-    });
   };
 
-  const handleEditBook = () => {
+  const handleEditBook = async () => {
     if (!editingBook) return;
 
-    setBooks(
-      books.map((book) => (book.id === editingBook.id ? editingBook : book)),
-    );
-    setEditingBook(null);
+    try {
+      const response = await apiClient.updateBook(editingBook.id, editingBook);
 
-    toast({
-      title: "Success",
-      description: "Book updated successfully!",
-    });
+      if (response.success && response.data) {
+        setBooks(
+          books.map((book) => (book.id === editingBook.id ? response.data : book)),
+        );
+        toast({
+          title: "Success",
+          description: "Book updated successfully!",
+        });
+      } else {
+        throw new Error(response.message || 'Failed to update book');
+      }
+    } catch (error: any) {
+      console.error('Failed to update book:', error);
+      // Fallback to local state update
+      setBooks(
+        books.map((book) => (book.id === editingBook.id ? editingBook : book)),
+      );
+      toast({
+        title: "Warning",
+        description: "Book updated locally. Backend connection failed.",
+        variant: "default",
+      });
+    }
+
+    setEditingBook(null);
   };
 
-  const handleDeleteBook = (id: string) => {
-    setBooks(books.filter((book) => book.id !== id));
-    toast({
-      title: "Success",
-      description: "Book deleted successfully!",
-    });
+  const handleDeleteBook = async (id: string) => {
+    try {
+      const response = await apiClient.deleteBook(id);
+
+      if (response.success) {
+        setBooks(books.filter((book) => book.id !== id));
+        toast({
+          title: "Success",
+          description: "Book deleted successfully!",
+        });
+      } else {
+        throw new Error(response.message || 'Failed to delete book');
+      }
+    } catch (error: any) {
+      console.error('Failed to delete book:', error);
+      // Fallback to local state update
+      setBooks(books.filter((book) => book.id !== id));
+      toast({
+        title: "Warning",
+        description: "Book deleted locally. Backend connection failed.",
+        variant: "default",
+      });
+    }
   };
 
   const toggleBookStatus = (id: string) => {

@@ -22,6 +22,8 @@ import { Badge } from "@/components/ui/badge";
 import { GoogleStyleSearch } from "@/components/GoogleStyleSearch";
 import { useCart, useWishlist } from "@/contexts/AppContext";
 import { categories } from "@/data/books";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
+import { cn } from "@/lib/utils";
 
 export function Navigation() {
   const [searchQuery, setSearchQuery] = useState("");

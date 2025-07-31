@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react";
 import { Book, CartItem, WishlistItem, User } from "@/types/book";
+import { apiClient } from "@/lib/api";
 
 interface AppState {
   cart: CartItem[];

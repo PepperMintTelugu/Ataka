@@ -4,11 +4,13 @@ import { Home, Search, Heart, User, ShoppingBag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useCart, useWishlist } from "@/contexts/AppContext";
 import { cn } from "@/lib/utils";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
 
 export function MobileBottomNav() {
   const location = useLocation();
   const { itemCount, toggleCart } = useCart();
   const { wishlist, toggleWishlist } = useWishlist();
+  const { scrollDirection, isScrolled } = useScrollDirection(100);
 
   const isActive = (path: string) => {
     if (path === "/") {
@@ -33,7 +35,14 @@ export function MobileBottomNav() {
   };
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg">
+    <div
+      className={cn(
+        "lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg transition-transform duration-300 ease-in-out",
+        scrollDirection === "down" && isScrolled
+          ? "translate-y-full"
+          : "translate-y-0",
+      )}
+    >
       <nav className="grid grid-cols-5 h-16">
         {/* Home */}
         <Link

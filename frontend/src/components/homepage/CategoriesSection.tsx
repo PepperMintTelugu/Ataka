@@ -250,7 +250,7 @@ export default function CategoriesSection({
     {
       categoryId: "health",
       name: "Health & Wellness",
-      nameTelugu: "ఆరోగ్యం & శ్రేయస్సు",
+      nameTelugu: "ఆరోగ్యం & శ్రేయ���్సు",
       description: "Health, fitness and wellness guides",
       descriptionTelugu: "ఆరోగ్యం, ఫిట్నెస్ మరియు శ్రేయస్సు గైడ్లు",
       image:
@@ -295,7 +295,7 @@ export default function CategoriesSection({
     return null;
   }
 
-  const gridCols = `grid-cols-2 lg:grid-cols-${Math.min(settings.itemsPerRow || 4, 4)}`;
+  const gridCols = `grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8`;
 
   return (
     <section className="py-16 bg-white">
@@ -311,8 +311,8 @@ export default function CategoriesSection({
           <div className="w-24 h-1 bg-gradient-to-r from-brand-500 to-telugu-500 mx-auto mt-4"></div>
         </div>
 
-        {/* Categories Grid */}
-        <div className={cn("grid gap-6", gridCols)}>
+        {/* Categories Grid - Optimized for circular design */}
+        <div className={cn("grid gap-6 md:gap-8", gridCols)}>
           {displayCategories.map((category) => (
             <CategoryCard
               key={category.categoryId}
@@ -339,74 +339,74 @@ function CategoryCard({
       to={`/shop?category=${category.categoryId}`}
       className="group block transform transition-all duration-300 hover:scale-105"
     >
-      <Card className="border-0 shadow-md group-hover:shadow-xl transition-shadow duration-300 overflow-hidden rounded-2xl">
-        {/* Category Image/Icon - Smaller square format */}
-        <div className="relative aspect-square overflow-hidden">
-          {category.image ? (
-            <img
-              src={category.image}
-              alt={category.name}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-            />
-          ) : (
-            <div
-              className="w-full h-full bg-gradient-to-br flex items-center justify-center"
-              style={{
-                background: `linear-gradient(135deg, ${category.color}CC, ${category.color}99)`,
-              }}
-            >
-              {settings.showIcons && iconMap[category.icon || "literature"] && (
-                <div className="text-white">
-                  {iconMap[category.icon || "literature"]}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Subtle overlay for better text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
-
-          {/* Icon in corner if image exists */}
-          {settings.showIcons && category.image && (
-            <div className="absolute top-3 right-3 p-1.5 rounded-full bg-white/20 text-white">
-              <div className="w-5 h-5">
-                {iconMap[category.icon || "literature"]}
+      <div className="flex flex-col items-center text-center">
+        {/* Circular Category Container */}
+        <div className="relative mb-3">
+          <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden shadow-lg group-hover:shadow-xl transition-shadow duration-300 border-4 border-white">
+            {category.image ? (
+              <img
+                src={category.image}
+                alt={category.name}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+            ) : (
+              <div
+                className="w-full h-full bg-gradient-to-br flex items-center justify-center"
+                style={{
+                  background: `linear-gradient(135deg, ${category.color}CC, ${category.color}99)`,
+                }}
+              >
+                {settings.showIcons &&
+                  iconMap[category.icon || "literature"] && (
+                    <div className="text-white">
+                      {iconMap[category.icon || "literature"]}
+                    </div>
+                  )}
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Category Name overlay */}
-          <div className="absolute bottom-2 left-2 right-2">
-            <h3 className="text-sm font-bold text-white group-hover:text-yellow-300 transition-colors duration-200 line-clamp-2">
-              {category.name}
-            </h3>
-            {category.nameTelugu && (
-              <p className="text-xs text-gray-200 telugu-text line-clamp-1">
-                {category.nameTelugu}
-              </p>
+            {/* Subtle overlay for better icon visibility */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent rounded-full"></div>
+
+            {/* Icon overlay for image categories */}
+            {settings.showIcons && category.image && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="p-2 rounded-full bg-white/20 backdrop-blur-sm text-white">
+                  <div className="w-5 h-5 md:w-6 md:h-6">
+                    {iconMap[category.icon || "literature"]}
+                  </div>
+                </div>
+              </div>
             )}
           </div>
+
+          {/* Color ring on hover */}
+          <div
+            className="absolute inset-0 w-20 h-20 md:w-24 md:h-24 rounded-full border-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"
+            style={{ borderColor: category.color }}
+          ></div>
         </div>
 
-        {/* Compact footer with hover effect */}
-        <div className="p-3">
-          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <div
-              className="w-full h-0.5 rounded-full mb-2"
-              style={{ backgroundColor: category.color }}
-            ></div>
-            <div className="flex items-center justify-center gap-1">
-              <p
-                className="text-xs font-medium"
-                style={{ color: category.color }}
-              >
-                Explore Books
-              </p>
-              <BookOpen className="w-3 h-3" style={{ color: category.color }} />
-            </div>
-          </div>
+        {/* Category Names */}
+        <div className="space-y-1">
+          <h3 className="text-sm md:text-base font-semibold text-gray-800 group-hover:text-brand-600 transition-colors duration-200 line-clamp-2">
+            {category.name}
+          </h3>
+          {category.nameTelugu && (
+            <p className="text-xs md:text-sm text-gray-500 telugu-text line-clamp-1">
+              {category.nameTelugu}
+            </p>
+          )}
         </div>
-      </Card>
+
+        {/* Hover indicator */}
+        <div className="mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div
+            className="w-8 h-0.5 rounded-full"
+            style={{ backgroundColor: category.color }}
+          ></div>
+        </div>
+      </div>
     </Link>
   );
 }

@@ -6,15 +6,15 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
-import { 
-  Shield, 
-  Eye, 
-  EyeOff, 
-  LogIn, 
+import {
+  Shield,
+  Eye,
+  EyeOff,
+  LogIn,
   AlertTriangle,
   UserCheck,
   Globe,
-  KeyRound
+  KeyRound,
 } from "lucide-react";
 
 export default function AdminLogin() {
@@ -47,11 +47,7 @@ export default function AdminLogin() {
     }
   };
 
-  const demoCredentials = [
-    { username: "admin", password: "admin", role: "Super Admin", desc: "Full system access" },
-    { username: "orders", password: "orders", role: "Order Manager", desc: "Orders & customers" },
-    { username: "inventory", password: "inventory", role: "Inventory Manager", desc: "Books & publishers" }
-  ];
+  // Demo credentials removed for production
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
@@ -69,13 +65,17 @@ export default function AdminLogin() {
             <Shield className="w-8 h-8 text-blue-600 mr-2" />
             <h1 className="text-2xl font-bold text-gray-900">Admin Portal</h1>
           </div>
-          <p className="text-gray-600">Secure access to your bookstore management</p>
+          <p className="text-gray-600">
+            Secure access to your bookstore management
+          </p>
         </div>
 
         {/* Login Card */}
         <Card className="shadow-lg border-0">
           <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-center text-xl font-semibold">Sign In</CardTitle>
+            <CardTitle className="text-center text-xl font-semibold">
+              Sign In
+            </CardTitle>
             <p className="text-center text-sm text-gray-600">
               Enter your credentials to access the admin dashboard
             </p>
@@ -116,7 +116,11 @@ export default function AdminLogin() {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
                   </button>
                 </div>
               </div>
@@ -128,11 +132,7 @@ export default function AdminLogin() {
                 </Alert>
               )}
 
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={isLoading}
-              >
+              <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
@@ -146,40 +146,6 @@ export default function AdminLogin() {
                 )}
               </Button>
             </form>
-          </CardContent>
-        </Card>
-
-        {/* Demo Credentials */}
-        <Card className="mt-6 bg-amber-50 border-amber-200">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-amber-800 flex items-center">
-              <AlertTriangle className="w-4 h-4 mr-2" />
-              Demo Credentials
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {demoCredentials.map((cred, index) => (
-              <div key={index} className="text-xs bg-white p-2 rounded border">
-                <div className="flex justify-between items-center mb-1">
-                  <span className="font-medium text-gray-700">{cred.role}</span>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-6 px-2 text-xs"
-                    onClick={() => {
-                      setUsername(cred.username);
-                      setPassword(cred.password);
-                    }}
-                  >
-                    Use
-                  </Button>
-                </div>
-                <p className="text-gray-600 mb-1">{cred.desc}</p>
-                <code className="text-blue-600">
-                  {cred.username} / {cred.password}
-                </code>
-              </div>
-            ))}
           </CardContent>
         </Card>
 

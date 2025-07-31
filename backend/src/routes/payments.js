@@ -9,10 +9,17 @@ import { body, validationResult } from "express-validator";
 const router = express.Router();
 
 // Initialize Razorpay
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+let razorpay = null;
+if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+  razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
+  });
+} else {
+  console.warn(
+    "⚠️ Razorpay credentials not provided. Payment functionality will be limited.",
+  );
+}
 
 // @desc    Create Razorpay order
 // @route   POST /api/payments/create-order
@@ -82,6 +89,15 @@ router.post(
         return res.status(400).json({
           success: false,
           message: "Amount mismatch. Please refresh and try again.",
+        });
+      }
+
+      // Check if Razorpay is available
+      if (!razorpay) {
+        return res.status(503).json({
+          success: false,
+          message:
+            "Payment service temporarily unavailable. Please try again later.",
         });
       }
 

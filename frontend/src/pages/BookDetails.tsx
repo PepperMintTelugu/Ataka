@@ -37,15 +37,19 @@ import { BookPreview } from "@/components/BookPreview";
 import { DeliveryEstimation } from "@/components/DeliveryEstimation";
 import { getAuthorPath, getPublisherPath } from "@/utils/slugify";
 import { cn } from "@/lib/utils";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
+import { useNavigate } from "react-router-dom";
 
 export default function BookDetails() {
   const { id } = useParams<{ id: string }>();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const navigate = useNavigate();
 
   const book = id ? getBookById(id) : null;
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { scrollDirection, isScrolled } = useScrollDirection(100);
 
   if (!book) {
     return <Navigate to="/404" replace />;
@@ -63,6 +67,15 @@ export default function BookDetails() {
     for (let i = 0; i < quantity; i++) {
       addToCart(book);
     }
+  };
+
+  const handleBuyNow = () => {
+    // Add item to cart first
+    for (let i = 0; i < quantity; i++) {
+      addToCart(book);
+    }
+    // Then redirect to checkout
+    navigate("/checkout");
   };
 
   const handleToggleWishlist = () => {
@@ -299,9 +312,9 @@ export default function BookDetails() {
               {/* Stock Status */}
               <StockAlert book={book} variant="inline" />
 
-              {/* Quantity and Actions */}
+              {/* Quantity and Actions - Hidden on mobile, shown on desktop */}
               {book.inStock && (
-                <div className="space-y-4">
+                <div className="space-y-4 hidden lg:block">
                   <div className="flex items-center space-x-4">
                     <span className="font-medium">Quantity:</span>
                     <div className="flex items-center border rounded-lg">
@@ -358,10 +371,34 @@ export default function BookDetails() {
                   <Button
                     variant="outline"
                     size="lg"
+                    onClick={handleBuyNow}
                     className="w-full h-12 touch-manipulation"
                   >
                     <Package className="w-5 h-5 mr-2" />
                     Buy Now
+                  </Button>
+                </div>
+              )}
+
+              {/* Mobile-only wishlist button */}
+              {book.inStock && (
+                <div className="lg:hidden">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    onClick={handleToggleWishlist}
+                    className={cn(
+                      "w-full h-12 touch-manipulation",
+                      inWishlist && "border-red-500 text-red-500",
+                    )}
+                  >
+                    <Heart
+                      className={cn(
+                        "w-5 h-5 mr-2",
+                        inWishlist && "fill-current",
+                      )}
+                    />
+                    {inWishlist ? "Saved" : "Save"}
                   </Button>
                 </div>
               )}
@@ -716,6 +753,55 @@ export default function BookDetails() {
           </div>
         )}
       </div>
+
+      {/* Mobile Sticky Bottom Action Bar */}
+      {book.inStock && (
+        <div
+          className={cn(
+            "lg:hidden fixed left-0 right-0 z-40 bg-white border-t shadow-lg transition-all duration-300 ease-in-out",
+            scrollDirection === "down" && isScrolled ? "bottom-0" : "bottom-16",
+          )}
+        >
+          <div className="container mx-auto px-4 py-3">
+            <div className="grid grid-cols-2 gap-3">
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={handleAddToCart}
+                className="flex-1 h-12 touch-manipulation border-brand-500 text-brand-500 hover:bg-brand-50"
+              >
+                <ShoppingCart className="w-5 h-5 mr-2" />
+                Add to Cart
+              </Button>
+              <Button
+                size="lg"
+                onClick={handleBuyNow}
+                className="flex-1 h-12 touch-manipulation bg-brand-500 hover:bg-brand-600"
+              >
+                <Package className="w-5 h-5 mr-2" />
+                Buy Now
+              </Button>
+            </div>
+
+            {/* Price Display */}
+            <div className="flex items-center justify-center mt-2 space-x-2">
+              <span className="text-lg font-bold text-brand-600">
+                ₹{book.price}
+              </span>
+              {book.originalPrice && (
+                <span className="text-sm text-gray-500 line-through">
+                  ₹{book.originalPrice}
+                </span>
+              )}
+              {discountPercentage > 0 && (
+                <span className="text-sm font-medium text-green-600">
+                  {discountPercentage}% off
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

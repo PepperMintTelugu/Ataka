@@ -1,6 +1,6 @@
 // API client for backend communication
 export const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 interface ApiResponse<T> {
   success: boolean;
@@ -136,13 +136,6 @@ class ApiClient {
 
   async getOrder(id: string) {
     return this.request<ApiResponse<any>>(`/api/orders/${id}`);
-  }
-
-  async createOrder(orderData: any) {
-    return this.request<ApiResponse<any>>("/api/orders", {
-      method: "POST",
-      body: JSON.stringify(orderData),
-    });
   }
 
   async updateOrder(id: string, orderData: any) {

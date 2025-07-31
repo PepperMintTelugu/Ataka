@@ -9,10 +9,15 @@ import { body, validationResult } from "express-validator";
 const router = express.Router();
 
 // Initialize Razorpay
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+let razorpay = null;
+if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+  razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
+  });
+} else {
+  console.warn('⚠️ Razorpay credentials not provided. Payment functionality will be limited.');
+}
 
 // @desc    Create Razorpay order
 // @route   POST /api/payments/create-order

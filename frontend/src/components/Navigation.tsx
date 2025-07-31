@@ -31,6 +31,7 @@ export function Navigation() {
   const navigate = useNavigate();
   const { itemCount, toggleCart } = useCart();
   const { wishlist, toggleWishlist } = useWishlist();
+  const { scrollDirection, isScrolled } = useScrollDirection(50);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

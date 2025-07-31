@@ -307,7 +307,8 @@ const mockShipments: Shipment[] = [
 ];
 
 export default function ShippingManager() {
-  const [shipments, setShipments] = useState<Shipment[]>(mockShipments);
+  const [shipments, setShipments] = useState<Shipment[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterPartner, setFilterPartner] = useState("all");
@@ -315,6 +316,68 @@ export default function ShippingManager() {
     null,
   );
   const [showSettings, setShowSettings] = useState(false);
+  const { toast } = useToast();
+
+  // Load shipments on component mount
+  useEffect(() => {
+    loadShipments();
+  }, []);
+
+  const loadShipments = async () => {
+    try {
+      setLoading(true);
+      const response = await apiClient.getOrders(); // Get orders with shipping info
+      if (response.success && response.data) {
+        // Transform orders to shipments format
+        const shipmentsData = response.data
+          .filter((order: any) => order.delivery?.trackingNumber)
+          .map((order: any) => ({
+            id: order.id,
+            orderId: order.orderNumber,
+            awbNumber: order.delivery.trackingNumber,
+            customerName: order.shippingAddress?.fullName || 'Unknown',
+            customerPhone: order.shippingAddress?.phone || '',
+            shippingAddress: {
+              street: order.shippingAddress?.street || '',
+              city: order.shippingAddress?.city || '',
+              state: order.shippingAddress?.state || '',
+              pincode: order.shippingAddress?.pincode || '',
+            },
+            courierPartner: order.delivery.courierPartner || 'Shiprocket',
+            status: order.delivery.status || 'pending',
+            weight: order.delivery.weight || 0.5,
+            dimensions: order.delivery.dimensions || { length: 20, width: 15, height: 3 },
+            shippingCost: order.delivery.shippingCost || 0,
+            codAmount: order.payment?.method === 'cod' ? order.totalAmount : undefined,
+            createdAt: order.createdAt,
+            pickupDate: order.delivery.pickupDate,
+            deliveryDate: order.delivery.deliveryDate,
+            expectedDelivery: order.delivery.estimatedDelivery,
+            trackingEvents: order.delivery.trackingEvents || [],
+            notes: order.delivery.notes,
+          }));
+        setShipments(shipmentsData);
+      } else {
+        // Fallback to mock data
+        setShipments(mockShipments);
+        toast({
+          title: "Warning",
+          description: "Using sample data. Connect to backend for real shipping data.",
+          variant: "default",
+        });
+      }
+    } catch (error) {
+      console.error('Failed to load shipments:', error);
+      setShipments(mockShipments);
+      toast({
+        title: "Backend Connection Failed",
+        description: "Using sample data. Please check backend server.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   const [settings, setSettings] = useState({
     defaultCourier: "Delhivery",
     freeShippingThreshold: 500,

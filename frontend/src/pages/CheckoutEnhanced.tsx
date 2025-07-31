@@ -39,6 +39,7 @@ import {
   getAddressFromPincode,
   isValidPincode,
 } from "@/utils/location";
+import { apiClient } from "@/lib/api";
 
 declare global {
   interface Window {
@@ -295,30 +296,27 @@ export default function CheckoutEnhanced() {
     try {
       setIsProcessing(true);
 
-      // Create order on backend
-      const orderResponse = await fetch("/api/payments/create-order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          amount: finalAmount,
-          items: items.map((item) => ({
-            bookId: item.id,
-            quantity: item.quantity,
-            title: item.title,
-            price: item.price,
-          })),
-          address,
-        }),
+      // Create order using API client
+      const orderResponse = await apiClient.createPaymentOrder({
+        amount: finalAmount,
+        items: items.map((item) => ({
+          bookId: item.id,
+          quantity: item.quantity,
+          title: item.title,
+          price: item.price,
+        })),
+        shippingAddress: address,
+        notes: {
+          source: 'web',
+          step: 'checkout'
+        }
       });
 
-      const orderData = await orderResponse.json();
-
-      if (!orderData.success) {
-        throw new Error(orderData.message || "Failed to create order");
+      if (!orderResponse.success || !orderResponse.data) {
+        throw new Error(orderResponse.message || "Failed to create order");
       }
+
+      const orderData = orderResponse.data;
 
       // Initialize Razorpay
       const options = {

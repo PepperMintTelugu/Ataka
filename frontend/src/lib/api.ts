@@ -138,8 +138,6 @@ class ApiClient {
     return this.request<ApiResponse<any>>(`/api/orders/${id}`);
   }
 
-
-
   async updateOrder(id: string, orderData: any) {
     return this.request<ApiResponse<any>>(`/api/orders/${id}`, {
       method: "PUT",

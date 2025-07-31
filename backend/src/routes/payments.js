@@ -16,7 +16,9 @@ if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
     key_secret: process.env.RAZORPAY_KEY_SECRET,
   });
 } else {
-  console.warn('⚠️ Razorpay credentials not provided. Payment functionality will be limited.');
+  console.warn(
+    "⚠️ Razorpay credentials not provided. Payment functionality will be limited.",
+  );
 }
 
 // @desc    Create Razorpay order
@@ -94,7 +96,8 @@ router.post(
       if (!razorpay) {
         return res.status(503).json({
           success: false,
-          message: "Payment service temporarily unavailable. Please try again later.",
+          message:
+            "Payment service temporarily unavailable. Please try again later.",
         });
       }
 

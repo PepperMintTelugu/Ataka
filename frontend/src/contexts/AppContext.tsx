@@ -132,8 +132,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // Load data from localStorage on mount
   useEffect(() => {
     try {
-      const savedCart = localStorage.getItem("telugu-books-cart");
-      const savedWishlist = localStorage.getItem("telugu-books-wishlist");
+      const savedCart = localStorage.getItem("ataka-cart");
+      const savedWishlist = localStorage.getItem("ataka-wishlist");
 
       if (savedCart) {
         const cart = JSON.parse(savedCart);
@@ -155,14 +155,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   // Save to localStorage when cart or wishlist changes
   useEffect(() => {
-    localStorage.setItem("telugu-books-cart", JSON.stringify(state.cart));
+    localStorage.setItem("ataka-cart", JSON.stringify(state.cart));
   }, [state.cart]);
 
   useEffect(() => {
-    localStorage.setItem(
-      "telugu-books-wishlist",
-      JSON.stringify(state.wishlist),
-    );
+    localStorage.setItem("ataka-wishlist", JSON.stringify(state.wishlist));
   }, [state.wishlist]);
 
   return (
@@ -176,6 +173,7 @@ export function useApp() {
   const context = useContext(AppContext);
   if (!context) {
     console.error("AppContext is null. Current context:", context);
+    console.error("Make sure AppProvider is properly wrapping your component");
     throw new Error("useApp must be used within an AppProvider");
   }
   return context;

@@ -22,6 +22,8 @@ import { Badge } from "@/components/ui/badge";
 import { GoogleStyleSearch } from "@/components/GoogleStyleSearch";
 import { useCart, useWishlist } from "@/contexts/AppContext";
 import { categories } from "@/data/books";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
+import { cn } from "@/lib/utils";
 
 export function Navigation() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,6 +31,7 @@ export function Navigation() {
   const navigate = useNavigate();
   const { itemCount, toggleCart } = useCart();
   const { wishlist, toggleWishlist } = useWishlist();
+  const { scrollDirection, isScrolled } = useScrollDirection(50);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +43,14 @@ export function Navigation() {
   };
 
   return (
-    <header className="bg-white shadow-sm border-b sticky top-0 z-50">
+    <header
+      className={cn(
+        "bg-white shadow-sm border-b sticky top-0 z-50 transition-transform duration-300 ease-in-out",
+        scrollDirection === "down" && isScrolled
+          ? "-translate-y-full"
+          : "translate-y-0",
+      )}
+    >
       {/* Top bar with offers - Hidden on mobile for cleaner look */}
       <div className="hidden sm:block bg-gradient-to-r from-brand-500 to-telugu-500 text-white py-2">
         <div className="container mx-auto px-4 text-center text-sm">

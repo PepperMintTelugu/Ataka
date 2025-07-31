@@ -47,11 +47,7 @@ export default function AdminLogin() {
     }
   };
 
-  const demoCredentials = [
-    { username: "admin", password: "admin", role: "Super Admin", desc: "Full system access" },
-    { username: "orders", password: "orders", role: "Order Manager", desc: "Orders & customers" },
-    { username: "inventory", password: "inventory", role: "Inventory Manager", desc: "Books & publishers" }
-  ];
+  // Demo credentials removed for production
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
@@ -149,39 +145,7 @@ export default function AdminLogin() {
           </CardContent>
         </Card>
 
-        {/* Demo Credentials */}
-        <Card className="mt-6 bg-amber-50 border-amber-200">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-amber-800 flex items-center">
-              <AlertTriangle className="w-4 h-4 mr-2" />
-              Demo Credentials
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {demoCredentials.map((cred, index) => (
-              <div key={index} className="text-xs bg-white p-2 rounded border">
-                <div className="flex justify-between items-center mb-1">
-                  <span className="font-medium text-gray-700">{cred.role}</span>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-6 px-2 text-xs"
-                    onClick={() => {
-                      setUsername(cred.username);
-                      setPassword(cred.password);
-                    }}
-                  >
-                    Use
-                  </Button>
-                </div>
-                <p className="text-gray-600 mb-1">{cred.desc}</p>
-                <code className="text-blue-600">
-                  {cred.username} / {cred.password}
-                </code>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+
 
         {/* Back to Store */}
         <div className="text-center mt-6">

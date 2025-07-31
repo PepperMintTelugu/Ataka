@@ -109,7 +109,7 @@ export default function CategoriesSection({
       name: "Poetry",
       nameTelugu: "కవిత్వం",
       description: "Beautiful Telugu poems and verses",
-      descriptionTelugu: "అందమైన త���లుగు కవితలు మరియు పద్యాలు",
+      descriptionTelugu: "అందమైన తెలుగు కవితలు మరియు పద్యాలు",
       image:
         "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400&h=300&fit=crop",
       icon: "poetry",
@@ -250,7 +250,7 @@ export default function CategoriesSection({
     {
       categoryId: "health",
       name: "Health & Wellness",
-      nameTelugu: "ఆరోగ్యం & శ్రేయస్సు",
+      nameTelugu: "ఆరోగ్యం & శ్రేయ���్సు",
       description: "Health, fitness and wellness guides",
       descriptionTelugu: "ఆరోగ్యం, ఫిట్నెస్ మరియు శ్రేయస్సు గైడ్లు",
       image:
@@ -295,7 +295,7 @@ export default function CategoriesSection({
     return null;
   }
 
-  const gridCols = `grid-cols-2 lg:grid-cols-${Math.min(settings.itemsPerRow || 4, 4)}`;
+  const gridCols = `grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8`;
 
   return (
     <section className="py-16 bg-white">
@@ -311,8 +311,8 @@ export default function CategoriesSection({
           <div className="w-24 h-1 bg-gradient-to-r from-brand-500 to-telugu-500 mx-auto mt-4"></div>
         </div>
 
-        {/* Categories Grid */}
-        <div className={cn("grid gap-6", gridCols)}>
+        {/* Categories Grid - Optimized for circular design */}
+        <div className={cn("grid gap-6 md:gap-8", gridCols)}>
           {displayCategories.map((category) => (
             <CategoryCard
               key={category.categoryId}

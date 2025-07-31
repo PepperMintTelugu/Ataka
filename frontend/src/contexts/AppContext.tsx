@@ -131,35 +131,25 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   // Load data from localStorage on mount
   useEffect(() => {
-    const savedCart = localStorage.getItem("telugu-books-cart");
-    const savedWishlist = localStorage.getItem("telugu-books-wishlist");
+    try {
+      const savedCart = localStorage.getItem("telugu-books-cart");
+      const savedWishlist = localStorage.getItem("telugu-books-wishlist");
 
-    if (savedCart) {
-      try {
+      if (savedCart) {
         const cart = JSON.parse(savedCart);
-        cart.forEach((item: CartItem) => {
-          dispatch({ type: "ADD_TO_CART", payload: item.book });
-          if (item.quantity > 1) {
-            dispatch({
-              type: "UPDATE_CART_QUANTITY",
-              payload: { bookId: item.book.id, quantity: item.quantity },
-            });
-          }
-        });
-      } catch (error) {
-        console.error("Error loading cart from localStorage:", error);
+        if (Array.isArray(cart)) {
+          dispatch({ type: "SYNC_CART", payload: cart });
+        }
       }
-    }
 
-    if (savedWishlist) {
-      try {
+      if (savedWishlist) {
         const wishlist = JSON.parse(savedWishlist);
-        wishlist.forEach((item: WishlistItem) => {
-          dispatch({ type: "ADD_TO_WISHLIST", payload: item.book });
-        });
-      } catch (error) {
-        console.error("Error loading wishlist from localStorage:", error);
+        if (Array.isArray(wishlist)) {
+          dispatch({ type: "SYNC_WISHLIST", payload: wishlist });
+        }
       }
+    } catch (error) {
+      console.error("Error loading data from localStorage:", error);
     }
   }, []);
 

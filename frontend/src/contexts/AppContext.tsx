@@ -18,8 +18,10 @@ type AppAction =
       payload: { bookId: string; quantity: number };
     }
   | { type: "CLEAR_CART" }
+  | { type: "SYNC_CART"; payload: CartItem[] }
   | { type: "ADD_TO_WISHLIST"; payload: Book }
   | { type: "REMOVE_FROM_WISHLIST"; payload: string }
+  | { type: "SYNC_WISHLIST"; payload: WishlistItem[] }
   | { type: "SET_USER"; payload: User | null }
   | { type: "TOGGLE_CART" }
   | { type: "TOGGLE_WISHLIST" }
@@ -96,6 +98,8 @@ function appReducer(state: AppState, action: AppAction): AppState {
           (item) => item.book.id !== action.payload,
         ),
       };
+    case "SYNC_WISHLIST":
+      return { ...state, wishlist: action.payload };
     case "SET_USER":
       return { ...state, user: action.payload };
     case "TOGGLE_CART":

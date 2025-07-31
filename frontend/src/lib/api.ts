@@ -206,14 +206,320 @@ class ApiClient {
     });
   }
 
+  // Payment API
+  async createPaymentOrder(orderData: {
+    amount: number;
+    currency?: string;
+    items: any[];
+    shippingAddress: any;
+    notes?: any;
+  }) {
+    return this.request<ApiResponse<{
+      orderId: string;
+      razorpayOrderId: string;
+      amount: number;
+      currency: string;
+    }>>('/api/payments/create-order', {
+      method: 'POST',
+      body: JSON.stringify(orderData),
+    });
+  }
+
+  async verifyPayment(paymentData: {
+    razorpayOrderId: string;
+    razorpayPaymentId: string;
+    razorpaySignature: string;
+    orderId: string;
+  }) {
+    return this.request<ApiResponse<{
+      verified: boolean;
+      order: any;
+    }>>('/api/payments/verify-payment', {
+      method: 'POST',
+      body: JSON.stringify(paymentData),
+    });
+  }
+
+  async getPaymentConfig() {
+    return this.request<ApiResponse<{
+      keyId: string;
+      currency: string;
+    }>>('/api/payments/config');
+  }
+
+  // Order API Extended
+  async createOrder(orderData: {
+    items: any[];
+    shippingAddress: any;
+    paymentMethod: string;
+    notes?: string;
+  }) {
+    return this.request<ApiResponse<any>>('/api/orders', {
+      method: 'POST',
+      body: JSON.stringify(orderData),
+    });
+  }
+
+  async updateOrderStatus(orderId: string, status: string) {
+    return this.request<ApiResponse<any>>(`/api/orders/${orderId}/status`, {
+      method: 'PUT',
+      body: JSON.stringify({ status }),
+    });
+  }
+
+  async cancelOrder(orderId: string, reason?: string) {
+    return this.request<ApiResponse<any>>(`/api/orders/${orderId}/cancel`, {
+      method: 'POST',
+      body: JSON.stringify({ reason }),
+    });
+  }
+
+  async getOrderInvoice(orderId: string) {
+    return this.request<Blob>(`/api/orders/${orderId}/invoice`, {
+      method: 'GET',
+    });
+  }
+
+  async trackOrder(orderId: string) {
+    return this.request<ApiResponse<{
+      status: string;
+      trackingNumber?: string;
+      deliveryEstimate: string;
+      statusHistory: any[];
+    }>>(`/api/orders/${orderId}/track`);
+  }
+
+  // Shipping API
+  async calculateShipping(data: {
+    items: any[];
+    pincode: string;
+    weight?: number;
+  }) {
+    return this.request<ApiResponse<{
+      shippingCost: number;
+      deliveryEstimate: string;
+      availableCouriers: any[];
+    }>>('/api/delivery/calculate', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async createShipment(orderData: {
+    orderId: string;
+    courierPartner: string;
+    pickupLocation?: string;
+  }) {
+    return this.request<ApiResponse<{
+      shipmentId: string;
+      trackingNumber: string;
+      courierName: string;
+    }>>('/api/delivery/create-shipment', {
+      method: 'POST',
+      body: JSON.stringify(orderData),
+    });
+  }
+
+  async trackShipment(trackingNumber: string) {
+    return this.request<ApiResponse<{
+      status: string;
+      location: string;
+      estimatedDelivery: string;
+      history: any[];
+    }>>(`/api/delivery/track/${trackingNumber}`);
+  }
+
+  // Cart API (for logged in users)
+  async saveCart(cartItems: any[]) {
+    return this.request<ApiResponse<any>>('/api/users/cart', {
+      method: 'POST',
+      body: JSON.stringify({ items: cartItems }),
+    });
+  }
+
+  async getCart() {
+    return this.request<ApiResponse<any[]>>('/api/users/cart');
+  }
+
+  async syncCart(localCartItems: any[]) {
+    return this.request<ApiResponse<any[]>>('/api/users/cart/sync', {
+      method: 'POST',
+      body: JSON.stringify({ localItems: localCartItems }),
+    });
+  }
+
+  // Wishlist API
+  async getWishlist() {
+    return this.request<ApiResponse<any[]>>('/api/users/wishlist');
+  }
+
+  async addToWishlist(bookId: string) {
+    return this.request<ApiResponse<any>>('/api/users/wishlist', {
+      method: 'POST',
+      body: JSON.stringify({ bookId }),
+    });
+  }
+
+  async removeFromWishlist(bookId: string) {
+    return this.request<ApiResponse<any>>(`/api/users/wishlist/${bookId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Analytics and Admin APIs
+  async getAnalytics(timeframe: string = '30d') {
+    return this.request<ApiResponse<{
+      revenue: number;
+      orders: number;
+      customers: number;
+      topBooks: any[];
+      revenueChart: any[];
+    }>>(`/api/analytics?timeframe=${timeframe}`);
+  }
+
+  async getInventoryStats() {
+    return this.request<ApiResponse<{
+      totalBooks: number;
+      lowStock: any[];
+      outOfStock: any[];
+      recentlyAdded: any[];
+    }>>('/api/admin/inventory/stats');
+  }
+
+  // Settings API
+  async getSettings() {
+    return this.request<ApiResponse<any>>('/api/settings');
+  }
+
+  async updateSettings(settings: any) {
+    return this.request<ApiResponse<any>>('/api/settings', {
+      method: 'PUT',
+      body: JSON.stringify(settings),
+    });
+  }
+
+  // Search API
+  async searchBooks(query: string, filters?: {
+    category?: string;
+    author?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    inStock?: boolean;
+  }) {
+    const params = new URLSearchParams({ q: query });
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          params.append(key, value.toString());
+        }
+      });
+    }
+
+    return this.request<ApiResponse<{
+      books: any[];
+      total: number;
+      suggestions: string[];
+    }>>(`/api/books/search?${params.toString()}`);
+  }
+
+  // Bulk operations for admin
+  async bulkUpdateBooks(updates: Array<{ id: string; updates: any }>) {
+    return this.request<ApiResponse<any>>('/api/admin/books/bulk-update', {
+      method: 'POST',
+      body: JSON.stringify({ updates }),
+    });
+  }
+
+  async exportData(type: 'books' | 'orders' | 'customers', format: 'csv' | 'xlsx' = 'csv') {
+    return this.request<Blob>(`/api/admin/export/${type}?format=${format}`, {
+      method: 'GET',
+    });
+  }
+
+  // Notification API
+  async getNotifications() {
+    return this.request<ApiResponse<any[]>>('/api/notifications');
+  }
+
+  async markNotificationRead(notificationId: string) {
+    return this.request<ApiResponse<any>>(`/api/notifications/${notificationId}/read`, {
+      method: 'POST',
+    });
+  }
+
   // Health check
   async healthCheck() {
     return this.request<any>('/health');
+  }
+
+  // Location and utility APIs
+  async validatePincode(pincode: string) {
+    return this.request<ApiResponse<{
+      valid: boolean;
+      city?: string;
+      state?: string;
+      deliverable: boolean;
+    }>>(`/api/utils/validate-pincode/${pincode}`);
+  }
+
+  async getStates() {
+    return this.request<ApiResponse<string[]>>('/api/utils/states');
+  }
+
+  async getCitiesByState(state: string) {
+    return this.request<ApiResponse<string[]>>(`/api/utils/cities/${state}`);
   }
 }
 
 // Create and export a singleton instance
 export const apiClient = new ApiClient();
 
-// Export types
+// Export types for the complete e-commerce functionality
+export interface CartItem {
+  bookId: string;
+  quantity: number;
+  price: number;
+  title: string;
+  image: string;
+}
+
+export interface Address {
+  fullName: string;
+  phone: string;
+  email: string;
+  street: string;
+  city: string;
+  state: string;
+  pincode: string;
+  landmark?: string;
+}
+
+export interface PaymentOrder {
+  orderId: string;
+  razorpayOrderId: string;
+  amount: number;
+  currency: string;
+}
+
+export interface Order {
+  id: string;
+  orderNumber: string;
+  status: string;
+  totalAmount: number;
+  items: CartItem[];
+  shippingAddress: Address;
+  payment: {
+    method: string;
+    status: string;
+    razorpayPaymentId?: string;
+  };
+  delivery: {
+    trackingNumber?: string;
+    courierPartner?: string;
+    estimatedDelivery?: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
 export type { ApiResponse };

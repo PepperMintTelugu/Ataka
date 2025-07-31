@@ -337,22 +337,13 @@ export default function CheckoutEnhanced() {
         },
         handler: async (response: any) => {
           try {
-            // Verify payment on backend
-            const verifyResponse = await fetch("/api/payments/verify-payment", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-              body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                orderId: orderData.data.orderId,
-              }),
+            // Verify payment using API client
+            const verifyData = await apiClient.verifyPayment({
+              razorpayOrderId: response.razorpay_order_id,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpaySignature: response.razorpay_signature,
+              orderId: orderData.orderId,
             });
-
-            const verifyData = await verifyResponse.json();
 
             if (verifyData.success) {
               toast({
@@ -384,7 +375,7 @@ export default function CheckoutEnhanced() {
               clearCart();
 
               // Redirect to success page
-              navigate(`/order-success/${verifyData.data.orderId}`);
+              navigate(`/order-success/${verifyData.data?.order?.id || orderData.orderId}`);
             } else {
               throw new Error(
                 verifyData.message || "Payment verification failed",

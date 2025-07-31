@@ -15,6 +15,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useAdminAuth } from "@/contexts/AdminAuthContext";
 
 declare global {
   interface Window {
@@ -60,6 +61,7 @@ export default function Login() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { settings } = useTheme();
+  const { login: adminLogin } = useAdminAuth();
 
   // Fetch signin settings from backend
   useEffect(() => {
@@ -326,6 +328,19 @@ export default function Login() {
     try {
       setIsLoading(true);
 
+      // Check if it's admin credentials first
+      const isAdminLogin = await adminLogin(email, password);
+
+      if (isAdminLogin) {
+        toast({
+          title: "Admin Access Granted",
+          description: "Successfully signed in as administrator",
+        });
+        navigate("/admin");
+        return;
+      }
+
+      // If not admin, try customer login
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
@@ -355,7 +370,7 @@ export default function Login() {
       console.error("Login error:", error);
       toast({
         title: "Sign In Failed",
-        description: error.message || "Invalid email or password",
+        description: error.message || "Invalid credentials",
         variant: "destructive",
       });
     } finally {

@@ -48,160 +48,169 @@ const App = () => (
       <ThemeProvider>
         <AppProvider>
           <AdminAuthProvider>
-            <Toaster />
-            <Sonner />
-          <BrowserRouter>
-            <ScrollToTop />
-            <div className="flex flex-col min-h-screen">
-              <Navigation />
-              <Cart />
-              <Wishlist />
+            <BrowserRouter>
+              <ScrollToTop />
+              <div className="flex flex-col min-h-screen">
+                <Navigation />
+                <Cart />
+                <Wishlist />
 
-              <main className="flex-1 pb-16 lg:pb-0">
-                <Routes>
-                  <Route path="/" element={<IndexCustomizable />} />
-                  <Route path="/shop" element={<Shop />} />
-                  <Route path="/book/:id" element={<BookDetails />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/contact" element={<Contact />} />
+                <main className="flex-1 pb-16 lg:pb-0">
+                  <Routes>
+                    <Route path="/" element={<IndexCustomizable />} />
+                    <Route path="/shop" element={<Shop />} />
+                    <Route path="/book/:id" element={<BookDetails />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/contact" element={<Contact />} />
 
-                  {/* Admin Routes */}
-                  <Route path="/admin" element={<Admin />} />
-                  <Route path="/admin/theme" element={<AdminTheme />} />
-                  <Route path="/admin/homepage" element={<AdminHomepage />} />
-                  <Route path="/admin/rankings" element={<AdminRankings />} />
-                  <Route path="/admin/import" element={<ProductImport />} />
-                  <Route path="/settings" element={<Settings />} />
+                    {/* Admin Routes */}
+                    <Route path="/admin" element={<Admin />} />
+                    <Route path="/admin/theme" element={<AdminTheme />} />
+                    <Route path="/admin/homepage" element={<AdminHomepage />} />
+                    <Route path="/admin/rankings" element={<AdminRankings />} />
+                    <Route path="/admin/import" element={<ProductImport />} />
+                    <Route path="/settings" element={<Settings />} />
 
-                  {/* Auth Routes */}
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
+                    {/* Auth Routes */}
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
 
-                  {/* Order Routes */}
-                  <Route path="/checkout" element={<CheckoutEnhanced />} />
-                  <Route
-                    path="/order-success/:orderId"
-                    element={<OrderSuccess />}
-                  />
+                    {/* Order Routes */}
+                    <Route path="/checkout" element={<CheckoutEnhanced />} />
+                    <Route
+                      path="/order-success/:orderId"
+                      element={<OrderSuccess />}
+                    />
 
-                  {/* Authors and Publishers */}
-                  <Route path="/authors" element={<AllAuthors />} />
-                  <Route path="/author/:authorName" element={<AuthorBooks />} />
-                  <Route
-                    path="/author-profile/:id"
-                    element={<AuthorProfile />}
-                  />
-                  <Route
-                    path="/publisher/:publisherName"
-                    element={<PublisherBooks />}
-                  />
-                  <Route
-                    path="/publisher-profile/:id"
-                    element={<PublisherProfile />}
-                  />
-                  <Route path="/publishers" element={<AllPublishers />} />
+                    {/* Authors and Publishers */}
+                    <Route path="/authors" element={<AllAuthors />} />
+                    <Route
+                      path="/author/:authorName"
+                      element={<AuthorBooks />}
+                    />
+                    <Route
+                      path="/author-profile/:id"
+                      element={<AuthorProfile />}
+                    />
+                    <Route
+                      path="/publisher/:publisherName"
+                      element={<PublisherBooks />}
+                    />
+                    <Route
+                      path="/publisher-profile/:id"
+                      element={<PublisherProfile />}
+                    />
+                    <Route path="/publishers" element={<AllPublishers />} />
 
-                  {/* Legacy routes for backward compatibility */}
-                  <Route path="/authors/:id" element={<AuthorBooks />} />
-                  <Route path="/publishers/:id" element={<PublisherBooks />} />
+                    {/* Legacy routes for backward compatibility */}
+                    <Route path="/authors/:id" element={<AuthorBooks />} />
+                    <Route
+                      path="/publishers/:id"
+                      element={<PublisherBooks />}
+                    />
 
-                  {/* Rankings */}
-                  <Route
-                    path="/rankings/:category"
-                    element={<CategoryRankings />}
-                  />
+                    {/* Rankings */}
+                    <Route
+                      path="/rankings/:category"
+                      element={<CategoryRankings />}
+                    />
 
-                  {/* Legal Pages */}
-                  <Route path="/terms" element={<TermsAndConditions />} />
-                  <Route path="/privacy" element={<PrivacyPolicy />} />
-                  <Route path="/refund-policy" element={<RefundPolicy />} />
-                  <Route path="/shipping-policy" element={<ShippingPolicy />} />
+                    {/* Legal Pages */}
+                    <Route path="/terms" element={<TermsAndConditions />} />
+                    <Route path="/privacy" element={<PrivacyPolicy />} />
+                    <Route path="/refund-policy" element={<RefundPolicy />} />
+                    <Route
+                      path="/shipping-policy"
+                      element={<ShippingPolicy />}
+                    />
 
-                  {/* Placeholder routes for future implementation */}
-                  <Route
-                    path="/orders"
-                    element={
-                      <PlaceholderPage
-                        title="My Orders"
-                        description="Order history coming soon"
-                      />
-                    }
-                  />
-                  <Route
-                    path="/profile"
-                    element={
-                      <PlaceholderPage
-                        title="My Profile"
-                        description="User profile management coming soon"
-                      />
-                    }
-                  />
-                  <Route path="/shipping" element={<ShippingPolicy />} />
-                  <Route path="/returns" element={<RefundPolicy />} />
-                  <Route
-                    path="/faq"
-                    element={
-                      <PlaceholderPage
-                        title="FAQ"
-                        description="Frequently asked questions coming soon"
-                      />
-                    }
-                  />
-                  <Route
-                    path="/track-order"
-                    element={
-                      <PlaceholderPage
-                        title="Track Order"
-                        description="ShipRocket tracking coming soon"
-                      />
-                    }
-                  />
-                  <Route
-                    path="/track-order/:orderId"
-                    element={
-                      <PlaceholderPage
-                        title="Track Order"
-                        description="Order tracking coming soon"
-                      />
-                    }
-                  />
-                  <Route
-                    path="/privacy"
-                    element={
-                      <PlaceholderPage
-                        title="Privacy Policy"
-                        description="Privacy policy coming soon"
-                      />
-                    }
-                  />
-                  <Route
-                    path="/terms"
-                    element={
-                      <PlaceholderPage
-                        title="Terms of Service"
-                        description="Terms and conditions coming soon"
-                      />
-                    }
-                  />
-                  <Route
-                    path="/forgot-password"
-                    element={
-                      <PlaceholderPage
-                        title="Forgot Password"
-                        description="Password reset coming soon"
-                      />
-                    }
-                  />
+                    {/* Placeholder routes for future implementation */}
+                    <Route
+                      path="/orders"
+                      element={
+                        <PlaceholderPage
+                          title="My Orders"
+                          description="Order history coming soon"
+                        />
+                      }
+                    />
+                    <Route
+                      path="/profile"
+                      element={
+                        <PlaceholderPage
+                          title="My Profile"
+                          description="User profile management coming soon"
+                        />
+                      }
+                    />
+                    <Route path="/shipping" element={<ShippingPolicy />} />
+                    <Route path="/returns" element={<RefundPolicy />} />
+                    <Route
+                      path="/faq"
+                      element={
+                        <PlaceholderPage
+                          title="FAQ"
+                          description="Frequently asked questions coming soon"
+                        />
+                      }
+                    />
+                    <Route
+                      path="/track-order"
+                      element={
+                        <PlaceholderPage
+                          title="Track Order"
+                          description="ShipRocket tracking coming soon"
+                        />
+                      }
+                    />
+                    <Route
+                      path="/track-order/:orderId"
+                      element={
+                        <PlaceholderPage
+                          title="Track Order"
+                          description="Order tracking coming soon"
+                        />
+                      }
+                    />
+                    <Route
+                      path="/privacy"
+                      element={
+                        <PlaceholderPage
+                          title="Privacy Policy"
+                          description="Privacy policy coming soon"
+                        />
+                      }
+                    />
+                    <Route
+                      path="/terms"
+                      element={
+                        <PlaceholderPage
+                          title="Terms of Service"
+                          description="Terms and conditions coming soon"
+                        />
+                      }
+                    />
+                    <Route
+                      path="/forgot-password"
+                      element={
+                        <PlaceholderPage
+                          title="Forgot Password"
+                          description="Password reset coming soon"
+                        />
+                      }
+                    />
 
-                  {/* Catch-all route */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </main>
+                    {/* Catch-all route */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </main>
 
-              <Footer />
-              <MobileBottomNav />
-            </div>
-          </BrowserRouter>
+                <Footer />
+                <MobileBottomNav />
+              </div>
+              <Toaster />
+              <Sonner />
+            </BrowserRouter>
           </AdminAuthProvider>
         </AppProvider>
       </ThemeProvider>

@@ -155,12 +155,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   // Save to localStorage when cart or wishlist changes
   useEffect(() => {
-    localStorage.setItem("telugu-books-cart", JSON.stringify(state.cart));
+    localStorage.setItem("ataka-cart", JSON.stringify(state.cart));
   }, [state.cart]);
 
   useEffect(() => {
     localStorage.setItem(
-      "telugu-books-wishlist",
+      "ataka-wishlist",
       JSON.stringify(state.wishlist),
     );
   }, [state.wishlist]);

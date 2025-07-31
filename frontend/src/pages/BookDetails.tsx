@@ -299,9 +299,9 @@ export default function BookDetails() {
               {/* Stock Status */}
               <StockAlert book={book} variant="inline" />
 
-              {/* Quantity and Actions */}
+              {/* Quantity and Actions - Hidden on mobile, shown on desktop */}
               {book.inStock && (
-                <div className="space-y-4">
+                <div className="space-y-4 hidden lg:block">
                   <div className="flex items-center space-x-4">
                     <span className="font-medium">Quantity:</span>
                     <div className="flex items-center border rounded-lg">
@@ -362,6 +362,29 @@ export default function BookDetails() {
                   >
                     <Package className="w-5 h-5 mr-2" />
                     Buy Now
+                  </Button>
+                </div>
+              )}
+
+              {/* Mobile-only wishlist button */}
+              {book.inStock && (
+                <div className="lg:hidden">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    onClick={handleToggleWishlist}
+                    className={cn(
+                      "w-full h-12 touch-manipulation",
+                      inWishlist && "border-red-500 text-red-500",
+                    )}
+                  >
+                    <Heart
+                      className={cn(
+                        "w-5 h-5 mr-2",
+                        inWishlist && "fill-current",
+                      )}
+                    />
+                    {inWishlist ? "Saved" : "Save"}
                   </Button>
                 </div>
               )}

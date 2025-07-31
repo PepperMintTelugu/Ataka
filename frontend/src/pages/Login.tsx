@@ -536,7 +536,7 @@ export default function Login() {
 
               {/* Register Link */}
               <div className="text-center pt-6 border-t">
-                <span className="text-gray-600">New to TeluguBooks? </span>
+                <span className="text-gray-600">New to Ataka? </span>
                 <Link
                   to="/register"
                   className="font-semibold hover:underline transition-colors"

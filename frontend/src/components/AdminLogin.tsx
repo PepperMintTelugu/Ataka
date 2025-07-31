@@ -6,15 +6,15 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
-import { 
-  Shield, 
-  Eye, 
-  EyeOff, 
-  LogIn, 
+import {
+  Shield,
+  Eye,
+  EyeOff,
+  LogIn,
   AlertTriangle,
   UserCheck,
   Globe,
-  KeyRound
+  KeyRound,
 } from "lucide-react";
 
 export default function AdminLogin() {
@@ -65,13 +65,17 @@ export default function AdminLogin() {
             <Shield className="w-8 h-8 text-blue-600 mr-2" />
             <h1 className="text-2xl font-bold text-gray-900">Admin Portal</h1>
           </div>
-          <p className="text-gray-600">Secure access to your bookstore management</p>
+          <p className="text-gray-600">
+            Secure access to your bookstore management
+          </p>
         </div>
 
         {/* Login Card */}
         <Card className="shadow-lg border-0">
           <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-center text-xl font-semibold">Sign In</CardTitle>
+            <CardTitle className="text-center text-xl font-semibold">
+              Sign In
+            </CardTitle>
             <p className="text-center text-sm text-gray-600">
               Enter your credentials to access the admin dashboard
             </p>
@@ -112,7 +116,11 @@ export default function AdminLogin() {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
                   </button>
                 </div>
               </div>
@@ -124,11 +132,7 @@ export default function AdminLogin() {
                 </Alert>
               )}
 
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={isLoading}
-              >
+              <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
@@ -144,8 +148,6 @@ export default function AdminLogin() {
             </form>
           </CardContent>
         </Card>
-
-
 
         {/* Back to Store */}
         <div className="text-center mt-6">

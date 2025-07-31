@@ -156,13 +156,13 @@ export function Navigation() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-              <Link to="/" className="flex items-center space-x-2">
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets%2Feb6a9d54076e488bac688c857f8339b7%2F68f0f0b566ee4fabb5929f4ee8330d25?format=webp&width=200"
-                  alt="Ataka - The Ultimate Bookstore"
-                  className="h-10 w-auto"
-                />
-              </Link>
+            <Link to="/" className="flex items-center space-x-2">
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets%2Feb6a9d54076e488bac688c857f8339b7%2F68f0f0b566ee4fabb5929f4ee8330d25?format=webp&width=200"
+                alt="Ataka - The Ultimate Bookstore"
+                className="h-10 w-auto"
+              />
+            </Link>
 
             {/* Search Bar - Desktop */}
             <form onSubmit={handleSearch} className="flex flex-1 max-w-md mx-8">
@@ -265,7 +265,6 @@ export function Navigation() {
                   <DropdownMenuItem asChild>
                     <Link to="/profile">My Profile</Link>
                   </DropdownMenuItem>
-
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

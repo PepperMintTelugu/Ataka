@@ -1,0 +1,21 @@
+{
+  "name": "orders-api",
+  "version": "1.0.0",
+  "description": "Orders management API function for Ataka bookstore",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'Build complete'",
+    "start": "node src/main.js"
+  },
+  "dependencies": {
+    "node-appwrite": "^12.0.0"
+  },
+  "keywords": [
+    "appwrite",
+    "orders",
+    "api",
+    "nodejs"
+  ],
+  "license": "MIT"
+}

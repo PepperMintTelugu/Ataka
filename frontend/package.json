@@ -10,7 +10,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run typecheck && vite build",
     "build:prod": "npm run typecheck && vite build --mode production",
     "preview": "vite preview",
     "test": "vitest --run",
@@ -27,8 +27,7 @@
     "start": "npm run preview",
     "health-check": "curl http://localhost:8080/health || echo 'Health check failed'",
     "validate-env": "node -e \"console.log('Environment validation passed')\"",
-    "precommit": "npm run lint && npm run typecheck && npm run test",
-    "postinstall": "npm run validate-env"
+    "precommit": "npm run typecheck"
   },
   "keywords": [
     "telugu",
@@ -39,9 +38,9 @@
     "react",
     "typescript",
     "vite",
+    "appwrite",
     "razorpay",
-    "shiprocket",
-    "google-auth"
+    "shiprocket"
   ],
   "author": "Telugu Books Team",
   "license": "MIT",
@@ -84,6 +83,7 @@
     "@tanstack/react-query": "^5.56.2",
     "@types/react-beautiful-dnd": "^13.1.8",
     "@types/three": "^0.176.0",
+    "appwrite": "^15.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",

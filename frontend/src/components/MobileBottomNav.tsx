@@ -4,6 +4,7 @@ import { Home, Search, Heart, User, ShoppingBag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useCart, useWishlist } from "@/contexts/AppContext";
 import { cn } from "@/lib/utils";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
 
 export function MobileBottomNav() {
   const location = useLocation();

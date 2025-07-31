@@ -151,13 +151,23 @@ export default function Login() {
     try {
       setIsGoogleLoading(true);
 
-      const res = await fetch("/api/auth/google", {
+      if (!response.credential) {
+        throw new Error("No credential received from Google");
+      }
+
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+      const res = await fetch(`${apiUrl}/api/auth/google`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ credential: response.credential }),
+        credentials: 'include',
       });
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+      }
 
       const data = await res.json();
 
@@ -174,13 +184,23 @@ export default function Login() {
           new URLSearchParams(window.location.search).get("redirect") || "/";
         navigate(redirectTo);
       } else {
-        throw new Error(data.message);
+        throw new Error(data.message || "Google authentication failed");
       }
     } catch (error) {
       console.error("Google login error:", error);
+
+      let errorMessage = "Failed to sign in with Google. Please try again.";
+      if (error instanceof Error) {
+        if (error.message.includes("fetch")) {
+          errorMessage = "Network error. Please check your connection and try again.";
+        } else if (error.message.includes("credential")) {
+          errorMessage = "Google authentication error. Please try again.";
+        }
+      }
+
       toast({
         title: "Sign In Failed",
-        description: "Failed to sign in with Google. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {

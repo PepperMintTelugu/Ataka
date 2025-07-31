@@ -165,13 +165,73 @@ const mockPayments: Payment[] = [
 ];
 
 export default function PaymentsManager() {
-  const [payments, setPayments] = useState<Payment[]>(mockPayments);
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterMethod, setFilterMethod] = useState("all");
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const { toast } = useToast();
+
+  // Load payments on component mount
+  useEffect(() => {
+    loadPayments();
+  }, []);
+
+  const loadPayments = async () => {
+    try {
+      setLoading(true);
+      const response = await apiClient.getOrders(); // Get orders which include payment info
+      if (response.success && response.data) {
+        // Transform orders to payments format
+        const paymentsData = response.data
+          .filter((order: any) => order.payment)
+          .map((order: any) => ({
+            id: order.payment.id || order.id,
+            orderId: order.orderNumber,
+            customerName: order.shippingAddress?.fullName || 'Unknown',
+            customerEmail: order.shippingAddress?.email || 'unknown@email.com',
+            amount: order.totalAmount,
+            status: order.payment.status,
+            paymentMethod: order.payment.method,
+            gateway: order.payment.gateway || 'Razorpay',
+            transactionId: order.payment.transactionId,
+            razorpayPaymentId: order.payment.razorpayPaymentId,
+            razorpayOrderId: order.payment.razorpayOrderId,
+            razorpaySignature: order.payment.razorpaySignature,
+            createdAt: order.createdAt,
+            updatedAt: order.updatedAt,
+            fee: order.payment.fee || 0,
+            tax: order.payment.tax || 0,
+            netAmount: order.payment.netAmount || order.totalAmount,
+            refundAmount: order.payment.refundAmount,
+            refundReason: order.payment.refundReason,
+            failureReason: order.payment.failureReason,
+          }));
+        setPayments(paymentsData);
+      } else {
+        // Fallback to mock data
+        setPayments(mockPayments);
+        toast({
+          title: "Warning",
+          description: "Using sample data. Connect to backend for real payment data.",
+          variant: "default",
+        });
+      }
+    } catch (error) {
+      console.error('Failed to load payments:', error);
+      setPayments(mockPayments);
+      toast({
+        title: "Backend Connection Failed",
+        description: "Using sample data. Please check backend server.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   const [paymentSettings, setPaymentSettings] = useState({
     razorpayKeyId: "",
     razorpayKeySecret: "",

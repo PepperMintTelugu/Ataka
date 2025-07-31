@@ -69,6 +69,15 @@ export default function BookDetails() {
     }
   };
 
+  const handleBuyNow = () => {
+    // Add item to cart first
+    for (let i = 0; i < quantity; i++) {
+      addToCart(book);
+    }
+    // Then redirect to checkout
+    navigate('/checkout');
+  };
+
   const handleToggleWishlist = () => {
     if (inWishlist) {
       removeFromWishlist(book.id);
@@ -639,7 +648,7 @@ export default function BookDetails() {
                         <ul className="text-sm text-gray-600 space-y-1">
                           <li>• Orders above ₹299 across India</li>
                           <li>• No minimum order for metro cities</li>
-                          <li>• Covers all pin codes</li>
+                          <li>��� Covers all pin codes</li>
                         </ul>
                       </div>
 

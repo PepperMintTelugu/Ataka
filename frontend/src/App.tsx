@@ -213,7 +213,9 @@ const App = () => (
                 </main>
 
                 <Footer />
-                <MobileBottomNav />
+                <ErrorBoundary>
+                  <MobileBottomNav />
+                </ErrorBoundary>
               </div>
               <Toaster />
               <Sonner />

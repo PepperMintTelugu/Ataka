@@ -132,8 +132,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // Load data from localStorage on mount
   useEffect(() => {
     try {
-      const savedCart = localStorage.getItem("telugu-books-cart");
-      const savedWishlist = localStorage.getItem("telugu-books-wishlist");
+      const savedCart = localStorage.getItem("ataka-cart");
+      const savedWishlist = localStorage.getItem("ataka-wishlist");
 
       if (savedCart) {
         const cart = JSON.parse(savedCart);

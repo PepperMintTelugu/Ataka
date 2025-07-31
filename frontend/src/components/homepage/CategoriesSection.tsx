@@ -356,11 +356,12 @@ function CategoryCard({
                   background: `linear-gradient(135deg, ${category.color}CC, ${category.color}99)`,
                 }}
               >
-                {settings.showIcons && iconMap[category.icon || "literature"] && (
-                  <div className="text-white">
-                    {iconMap[category.icon || "literature"]}
-                  </div>
-                )}
+                {settings.showIcons &&
+                  iconMap[category.icon || "literature"] && (
+                    <div className="text-white">
+                      {iconMap[category.icon || "literature"]}
+                    </div>
+                  )}
               </div>
             )}
 

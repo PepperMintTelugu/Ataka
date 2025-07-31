@@ -35,10 +35,14 @@ export function MobileBottomNav() {
   };
 
   return (
-    <div className={cn(
-      "lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg transition-transform duration-300 ease-in-out",
-      scrollDirection === 'down' && isScrolled ? "translate-y-full" : "translate-y-0"
-    )}>
+    <div
+      className={cn(
+        "lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg transition-transform duration-300 ease-in-out",
+        scrollDirection === "down" && isScrolled
+          ? "translate-y-full"
+          : "translate-y-0",
+      )}
+    >
       <nav className="grid grid-cols-5 h-16">
         {/* Home */}
         <Link

@@ -744,10 +744,12 @@ export default function BookDetails() {
 
       {/* Mobile Sticky Bottom Action Bar */}
       {book.inStock && (
-        <div className={cn(
-          "lg:hidden fixed left-0 right-0 z-40 bg-white border-t shadow-lg transition-all duration-300 ease-in-out",
-          scrollDirection === 'down' && isScrolled ? "bottom-0" : "bottom-16"
-        )}>
+        <div
+          className={cn(
+            "lg:hidden fixed left-0 right-0 z-40 bg-white border-t shadow-lg transition-all duration-300 ease-in-out",
+            scrollDirection === "down" && isScrolled ? "bottom-0" : "bottom-16",
+          )}
+        >
           <div className="container mx-auto px-4 py-3">
             <div className="grid grid-cols-2 gap-3">
               <Button

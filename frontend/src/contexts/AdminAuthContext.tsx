@@ -99,8 +99,8 @@ export function AdminAuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (username: string, password: string): Promise<boolean> => {
     // In production, this would call your backend API
     // For now, using default credentials
-    
-    if ((username === "admin" && password === "admin") ||
+
+    if ((username === "admin" && password === "10kk1a0468") ||
         (username === "orders" && password === "orders") ||
         (username === "inventory" && password === "inventory")) {
       

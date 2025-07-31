@@ -138,12 +138,7 @@ class ApiClient {
     return this.request<ApiResponse<any>>(`/api/orders/${id}`);
   }
 
-  async createOrder(orderData: any) {
-    return this.request<ApiResponse<any>>("/api/orders", {
-      method: "POST",
-      body: JSON.stringify(orderData),
-    });
-  }
+
 
   async updateOrder(id: string, orderData: any) {
     return this.request<ApiResponse<any>>(`/api/orders/${id}`, {

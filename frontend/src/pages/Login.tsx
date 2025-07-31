@@ -323,7 +323,7 @@ export default function Login() {
       if (data.success) {
         toast({
           title: "Sign In Successful",
-          description: "Welcome to TeluguBooks!",
+          description: "Welcome to Ataka!",
         });
 
         localStorage.setItem("user", JSON.stringify(data.data.user));

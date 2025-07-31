@@ -199,6 +199,8 @@ const App = () => (
               <Footer />
               <MobileBottomNav />
             </div>
+            <Toaster />
+            <Sonner />
           </BrowserRouter>
           </AdminAuthProvider>
         </AppProvider>

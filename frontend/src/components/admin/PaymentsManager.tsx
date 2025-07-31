@@ -33,6 +33,8 @@ import {
   Smartphone,
   Settings,
 } from "lucide-react";
+import { apiClient } from "@/lib/api";
+import { useToast } from "@/hooks/use-toast";
 
 interface Payment {
   id: string;
@@ -390,7 +392,7 @@ export default function PaymentsManager() {
                   <TrendingUp className="w-6 h-6 text-purple-600" />
                 </div>
                 <p className="text-2xl font-bold">
-                  ₹{totalFees.toLocaleString()}
+                  ��{totalFees.toLocaleString()}
                 </p>
                 <p className="text-sm text-gray-600">Gateway Fees</p>
               </CardContent>

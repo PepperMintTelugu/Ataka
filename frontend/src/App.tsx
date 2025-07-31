@@ -52,15 +52,9 @@ const App = () => (
             <BrowserRouter>
               <ScrollToTop />
               <div className="flex flex-col min-h-screen">
-                <ErrorBoundary>
-                  <Navigation />
-                </ErrorBoundary>
-                <ErrorBoundary>
-                  <Cart />
-                </ErrorBoundary>
-                <ErrorBoundary>
-                  <Wishlist />
-                </ErrorBoundary>
+                <Navigation />
+                <Cart />
+                <Wishlist />
 
                 <main className="flex-1 pb-16 lg:pb-0">
                   <Routes>

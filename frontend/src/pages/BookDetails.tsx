@@ -38,6 +38,7 @@ import { DeliveryEstimation } from "@/components/DeliveryEstimation";
 import { getAuthorPath, getPublisherPath } from "@/utils/slugify";
 import { cn } from "@/lib/utils";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
+import { useNavigate } from "react-router-dom";
 
 export default function BookDetails() {
   const { id } = useParams<{ id: string }>();

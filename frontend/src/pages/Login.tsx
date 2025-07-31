@@ -93,45 +93,58 @@ export default function Login() {
 
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
     if (!clientId || clientId === "demo-client-id") {
-      console.log("Telugu Books Demo: Google Sign-In disabled in demo mode");
+      console.log("Ataka Demo: Google Sign-In disabled in demo mode");
       return;
     }
 
     const initGoogleOneTap = () => {
-      if (window.google) {
-        window.google.accounts.id.initialize({
-          client_id: clientId,
-          callback: handleGoogleLogin,
-          auto_select: false,
-          cancel_on_tap_outside: false,
-          use_fedcm_for_prompt: false,
-        });
+      try {
+        if (window.google && window.google.accounts) {
+          window.google.accounts.id.initialize({
+            client_id: clientId,
+            callback: handleGoogleLogin,
+            auto_select: false,
+            cancel_on_tap_outside: false,
+            use_fedcm_for_prompt: false,
+          });
 
-        window.google.accounts.id.renderButton(
-          document.getElementById("google-signin-button"),
-          {
-            theme: "filled_blue",
-            size: "large",
-            type: "standard",
-            shape: "pill",
-            width: "100%",
-          },
-        );
+          const buttonElement = document.getElementById("google-signin-button");
+          if (buttonElement) {
+            window.google.accounts.id.renderButton(buttonElement, {
+              theme: "outline",
+              size: "large",
+              type: "standard",
+              shape: "rectangular",
+              width: "100%",
+              text: "continue_with",
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Failed to initialize Google Sign-in:", error);
       }
     };
 
-    const script = document.createElement("script");
-    script.src = "https://accounts.google.com/gsi/client";
-    script.async = true;
-    script.defer = true;
-    script.onload = initGoogleOneTap;
-    document.head.appendChild(script);
+    // Check if Google script is already loaded
+    if (window.google && window.google.accounts) {
+      initGoogleOneTap();
+    } else {
+      const script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      script.onload = initGoogleOneTap;
+      script.onerror = () => {
+        console.error("Failed to load Google Sign-in script");
+      };
+      document.head.appendChild(script);
 
-    return () => {
-      if (document.head.contains(script)) {
-        document.head.removeChild(script);
-      }
-    };
+      return () => {
+        if (document.head.contains(script)) {
+          document.head.removeChild(script);
+        }
+      };
+    }
   }, [signInSettings.enableGoogle]);
 
   const handleGoogleLogin = async (response: any) => {

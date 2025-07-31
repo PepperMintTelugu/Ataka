@@ -15,6 +15,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useAdminAuth } from "@/contexts/AdminAuthContext";
 
 declare global {
   interface Window {

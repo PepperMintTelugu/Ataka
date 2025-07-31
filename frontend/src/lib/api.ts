@@ -1,5 +1,6 @@
 // API client for backend communication
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+export const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 interface ApiResponse<T> {
   success: boolean;
@@ -17,38 +18,41 @@ class ApiClient {
 
   private async request<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
-    
+
     const config: RequestInit = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...options.headers,
       },
-      credentials: 'include',
+      credentials: "include",
       ...options,
     };
 
     try {
       const response = await fetch(url, config);
-      
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
+        throw new Error(
+          errorData.message ||
+            `HTTP ${response.status}: ${response.statusText}`,
+        );
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('API request failed:', error);
+      console.error("API request failed:", error);
       throw error;
     }
   }
 
   // Books API
   async getBooks() {
-    return this.request<ApiResponse<any[]>>('/api/books');
+    return this.request<ApiResponse<any[]>>("/api/books");
   }
 
   async getBook(id: string) {
@@ -56,78 +60,78 @@ class ApiClient {
   }
 
   async createBook(bookData: any) {
-    return this.request<ApiResponse<any>>('/api/books', {
-      method: 'POST',
+    return this.request<ApiResponse<any>>("/api/books", {
+      method: "POST",
       body: JSON.stringify(bookData),
     });
   }
 
   async updateBook(id: string, bookData: any) {
     return this.request<ApiResponse<any>>(`/api/books/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(bookData),
     });
   }
 
   async deleteBook(id: string) {
     return this.request<ApiResponse<any>>(`/api/books/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
   }
 
   // Authors API
   async getAuthors() {
-    return this.request<ApiResponse<any[]>>('/api/authors');
+    return this.request<ApiResponse<any[]>>("/api/authors");
   }
 
   async createAuthor(authorData: any) {
-    return this.request<ApiResponse<any>>('/api/authors', {
-      method: 'POST',
+    return this.request<ApiResponse<any>>("/api/authors", {
+      method: "POST",
       body: JSON.stringify(authorData),
     });
   }
 
   async updateAuthor(id: string, authorData: any) {
     return this.request<ApiResponse<any>>(`/api/authors/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(authorData),
     });
   }
 
   async deleteAuthor(id: string) {
     return this.request<ApiResponse<any>>(`/api/authors/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
   }
 
   // Publishers API
   async getPublishers() {
-    return this.request<ApiResponse<any[]>>('/api/publishers');
+    return this.request<ApiResponse<any[]>>("/api/publishers");
   }
 
   async createPublisher(publisherData: any) {
-    return this.request<ApiResponse<any>>('/api/publishers', {
-      method: 'POST',
+    return this.request<ApiResponse<any>>("/api/publishers", {
+      method: "POST",
       body: JSON.stringify(publisherData),
     });
   }
 
   async updatePublisher(id: string, publisherData: any) {
     return this.request<ApiResponse<any>>(`/api/publishers/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(publisherData),
     });
   }
 
   async deletePublisher(id: string) {
     return this.request<ApiResponse<any>>(`/api/publishers/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
   }
 
   // Orders API
   async getOrders() {
-    return this.request<ApiResponse<any[]>>('/api/orders');
+    return this.request<ApiResponse<any[]>>("/api/orders");
   }
 
   async getOrder(id: string) {
@@ -135,22 +139,22 @@ class ApiClient {
   }
 
   async createOrder(orderData: any) {
-    return this.request<ApiResponse<any>>('/api/orders', {
-      method: 'POST',
+    return this.request<ApiResponse<any>>("/api/orders", {
+      method: "POST",
       body: JSON.stringify(orderData),
     });
   }
 
   async updateOrder(id: string, orderData: any) {
     return this.request<ApiResponse<any>>(`/api/orders/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(orderData),
     });
   }
 
   // Users API
   async getUsers() {
-    return this.request<ApiResponse<any[]>>('/api/users');
+    return this.request<ApiResponse<any[]>>("/api/users");
   }
 
   async getUser(id: string) {
@@ -159,48 +163,48 @@ class ApiClient {
 
   async updateUser(id: string, userData: any) {
     return this.request<ApiResponse<any>>(`/api/users/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(userData),
     });
   }
 
   // Auth API
   async login(credentials: { email: string; password: string }) {
-    return this.request<ApiResponse<any>>('/api/auth/login', {
-      method: 'POST',
+    return this.request<ApiResponse<any>>("/api/auth/login", {
+      method: "POST",
       body: JSON.stringify(credentials),
     });
   }
 
   async register(userData: any) {
-    return this.request<ApiResponse<any>>('/api/auth/register', {
-      method: 'POST',
+    return this.request<ApiResponse<any>>("/api/auth/register", {
+      method: "POST",
       body: JSON.stringify(userData),
     });
   }
 
   async logout() {
-    return this.request<ApiResponse<any>>('/api/auth/logout', {
-      method: 'POST',
+    return this.request<ApiResponse<any>>("/api/auth/logout", {
+      method: "POST",
     });
   }
 
   async getCurrentUser() {
-    return this.request<ApiResponse<any>>('/api/auth/me');
+    return this.request<ApiResponse<any>>("/api/auth/me");
   }
 
   // Admin API
   async getAdminStats() {
-    return this.request<ApiResponse<any>>('/api/admin/stats');
+    return this.request<ApiResponse<any>>("/api/admin/stats");
   }
 
-  async uploadFile(file: File, path: string = 'books') {
+  async uploadFile(file: File, path: string = "books") {
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('path', path);
+    formData.append("file", file);
+    formData.append("path", path);
 
-    return this.request<ApiResponse<{ url: string }>>('/api/upload', {
-      method: 'POST',
+    return this.request<ApiResponse<{ url: string }>>("/api/upload", {
+      method: "POST",
       body: formData,
       headers: {}, // Let browser set Content-Type for FormData
     });
@@ -214,13 +218,15 @@ class ApiClient {
     shippingAddress: any;
     notes?: any;
   }) {
-    return this.request<ApiResponse<{
-      orderId: string;
-      razorpayOrderId: string;
-      amount: number;
-      currency: string;
-    }>>('/api/payments/create-order', {
-      method: 'POST',
+    return this.request<
+      ApiResponse<{
+        orderId: string;
+        razorpayOrderId: string;
+        amount: number;
+        currency: string;
+      }>
+    >("/api/payments/create-order", {
+      method: "POST",
       body: JSON.stringify(orderData),
     });
   }
@@ -231,20 +237,24 @@ class ApiClient {
     razorpaySignature: string;
     orderId: string;
   }) {
-    return this.request<ApiResponse<{
-      verified: boolean;
-      order: any;
-    }>>('/api/payments/verify-payment', {
-      method: 'POST',
+    return this.request<
+      ApiResponse<{
+        verified: boolean;
+        order: any;
+      }>
+    >("/api/payments/verify-payment", {
+      method: "POST",
       body: JSON.stringify(paymentData),
     });
   }
 
   async getPaymentConfig() {
-    return this.request<ApiResponse<{
-      keyId: string;
-      currency: string;
-    }>>('/api/payments/config');
+    return this.request<
+      ApiResponse<{
+        keyId: string;
+        currency: string;
+      }>
+    >("/api/payments/config");
   }
 
   // Order API Extended
@@ -254,39 +264,41 @@ class ApiClient {
     paymentMethod: string;
     notes?: string;
   }) {
-    return this.request<ApiResponse<any>>('/api/orders', {
-      method: 'POST',
+    return this.request<ApiResponse<any>>("/api/orders", {
+      method: "POST",
       body: JSON.stringify(orderData),
     });
   }
 
   async updateOrderStatus(orderId: string, status: string) {
     return this.request<ApiResponse<any>>(`/api/orders/${orderId}/status`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify({ status }),
     });
   }
 
   async cancelOrder(orderId: string, reason?: string) {
     return this.request<ApiResponse<any>>(`/api/orders/${orderId}/cancel`, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({ reason }),
     });
   }
 
   async getOrderInvoice(orderId: string) {
     return this.request<Blob>(`/api/orders/${orderId}/invoice`, {
-      method: 'GET',
+      method: "GET",
     });
   }
 
   async trackOrder(orderId: string) {
-    return this.request<ApiResponse<{
-      status: string;
-      trackingNumber?: string;
-      deliveryEstimate: string;
-      statusHistory: any[];
-    }>>(`/api/orders/${orderId}/track`);
+    return this.request<
+      ApiResponse<{
+        status: string;
+        trackingNumber?: string;
+        deliveryEstimate: string;
+        statusHistory: any[];
+      }>
+    >(`/api/orders/${orderId}/track`);
   }
 
   // Shipping API
@@ -295,12 +307,14 @@ class ApiClient {
     pincode: string;
     weight?: number;
   }) {
-    return this.request<ApiResponse<{
-      shippingCost: number;
-      deliveryEstimate: string;
-      availableCouriers: any[];
-    }>>('/api/delivery/calculate', {
-      method: 'POST',
+    return this.request<
+      ApiResponse<{
+        shippingCost: number;
+        deliveryEstimate: string;
+        availableCouriers: any[];
+      }>
+    >("/api/delivery/calculate", {
+      method: "POST",
       body: JSON.stringify(data),
     });
   }
@@ -310,102 +324,113 @@ class ApiClient {
     courierPartner: string;
     pickupLocation?: string;
   }) {
-    return this.request<ApiResponse<{
-      shipmentId: string;
-      trackingNumber: string;
-      courierName: string;
-    }>>('/api/delivery/create-shipment', {
-      method: 'POST',
+    return this.request<
+      ApiResponse<{
+        shipmentId: string;
+        trackingNumber: string;
+        courierName: string;
+      }>
+    >("/api/delivery/create-shipment", {
+      method: "POST",
       body: JSON.stringify(orderData),
     });
   }
 
   async trackShipment(trackingNumber: string) {
-    return this.request<ApiResponse<{
-      status: string;
-      location: string;
-      estimatedDelivery: string;
-      history: any[];
-    }>>(`/api/delivery/track/${trackingNumber}`);
+    return this.request<
+      ApiResponse<{
+        status: string;
+        location: string;
+        estimatedDelivery: string;
+        history: any[];
+      }>
+    >(`/api/delivery/track/${trackingNumber}`);
   }
 
   // Cart API (for logged in users)
   async saveCart(cartItems: any[]) {
-    return this.request<ApiResponse<any>>('/api/users/cart', {
-      method: 'POST',
+    return this.request<ApiResponse<any>>("/api/users/cart", {
+      method: "POST",
       body: JSON.stringify({ items: cartItems }),
     });
   }
 
   async getCart() {
-    return this.request<ApiResponse<any[]>>('/api/users/cart');
+    return this.request<ApiResponse<any[]>>("/api/users/cart");
   }
 
   async syncCart(localCartItems: any[]) {
-    return this.request<ApiResponse<any[]>>('/api/users/cart/sync', {
-      method: 'POST',
+    return this.request<ApiResponse<any[]>>("/api/users/cart/sync", {
+      method: "POST",
       body: JSON.stringify({ localItems: localCartItems }),
     });
   }
 
   // Wishlist API
   async getWishlist() {
-    return this.request<ApiResponse<any[]>>('/api/users/wishlist');
+    return this.request<ApiResponse<any[]>>("/api/users/wishlist");
   }
 
   async addToWishlist(bookId: string) {
-    return this.request<ApiResponse<any>>('/api/users/wishlist', {
-      method: 'POST',
+    return this.request<ApiResponse<any>>("/api/users/wishlist", {
+      method: "POST",
       body: JSON.stringify({ bookId }),
     });
   }
 
   async removeFromWishlist(bookId: string) {
     return this.request<ApiResponse<any>>(`/api/users/wishlist/${bookId}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
   }
 
   // Analytics and Admin APIs
-  async getAnalytics(timeframe: string = '30d') {
-    return this.request<ApiResponse<{
-      revenue: number;
-      orders: number;
-      customers: number;
-      topBooks: any[];
-      revenueChart: any[];
-    }>>(`/api/analytics?timeframe=${timeframe}`);
+  async getAnalytics(timeframe: string = "30d") {
+    return this.request<
+      ApiResponse<{
+        revenue: number;
+        orders: number;
+        customers: number;
+        topBooks: any[];
+        revenueChart: any[];
+      }>
+    >(`/api/analytics?timeframe=${timeframe}`);
   }
 
   async getInventoryStats() {
-    return this.request<ApiResponse<{
-      totalBooks: number;
-      lowStock: any[];
-      outOfStock: any[];
-      recentlyAdded: any[];
-    }>>('/api/admin/inventory/stats');
+    return this.request<
+      ApiResponse<{
+        totalBooks: number;
+        lowStock: any[];
+        outOfStock: any[];
+        recentlyAdded: any[];
+      }>
+    >("/api/admin/inventory/stats");
   }
 
   // Settings API
   async getSettings() {
-    return this.request<ApiResponse<any>>('/api/settings');
+    return this.request<ApiResponse<any>>("/api/settings");
   }
 
   async updateSettings(settings: any) {
-    return this.request<ApiResponse<any>>('/api/settings', {
-      method: 'PUT',
+    return this.request<ApiResponse<any>>("/api/settings", {
+      method: "PUT",
       body: JSON.stringify(settings),
     });
   }
 
   // Search API
-  async searchBooks(query: string, filters?: {
-    category?: string;
-    author?: string;
-    minPrice?: number;
-    maxPrice?: number;
-    inStock?: boolean;
-  }) {
+  async searchBooks(
+    query: string,
+    filters?: {
+      category?: string;
+      author?: string;
+      minPrice?: number;
+      maxPrice?: number;
+      inStock?: boolean;
+    },
+  ) {
     const params = new URLSearchParams({ q: query });
     if (filters) {
       Object.entries(filters).forEach(([key, value]) => {
@@ -415,55 +440,65 @@ class ApiClient {
       });
     }
 
-    return this.request<ApiResponse<{
-      books: any[];
-      total: number;
-      suggestions: string[];
-    }>>(`/api/books/search?${params.toString()}`);
+    return this.request<
+      ApiResponse<{
+        books: any[];
+        total: number;
+        suggestions: string[];
+      }>
+    >(`/api/books/search?${params.toString()}`);
   }
 
   // Bulk operations for admin
   async bulkUpdateBooks(updates: Array<{ id: string; updates: any }>) {
-    return this.request<ApiResponse<any>>('/api/admin/books/bulk-update', {
-      method: 'POST',
+    return this.request<ApiResponse<any>>("/api/admin/books/bulk-update", {
+      method: "POST",
       body: JSON.stringify({ updates }),
     });
   }
 
-  async exportData(type: 'books' | 'orders' | 'customers', format: 'csv' | 'xlsx' = 'csv') {
+  async exportData(
+    type: "books" | "orders" | "customers",
+    format: "csv" | "xlsx" = "csv",
+  ) {
     return this.request<Blob>(`/api/admin/export/${type}?format=${format}`, {
-      method: 'GET',
+      method: "GET",
     });
   }
 
   // Notification API
   async getNotifications() {
-    return this.request<ApiResponse<any[]>>('/api/notifications');
+    return this.request<ApiResponse<any[]>>("/api/notifications");
   }
 
   async markNotificationRead(notificationId: string) {
-    return this.request<ApiResponse<any>>(`/api/notifications/${notificationId}/read`, {
-      method: 'POST',
-    });
+    return this.request<ApiResponse<any>>(
+      `/api/notifications/${notificationId}/read`,
+      {
+        method: "POST",
+      },
+    );
   }
 
   // Health check
   async healthCheck() {
-    return this.request<any>('/health');
+    return this.request<any>("/health");
   }
 
   // Location and utility APIs
   async validatePincode(pincode: string) {
-    return this.request<ApiResponse<{
-      valid: boolean;
-      city?: string;
-      state?: string;
-      deliverable: boolean;
-    }>>(`/api/utils/validate-pincode/${pincode}`);
+    return this.request<
+      ApiResponse<{
+        valid: boolean;
+        city?: string;
+        state?: string;
+        deliverable: boolean;
+      }>
+    >(`/api/utils/validate-pincode/${pincode}`);
   }
 
   async getStates() {
-    return this.request<ApiResponse<string[]>>('/api/utils/states');
+    return this.request<ApiResponse<string[]>>("/api/utils/states");
   }
 
   async getCitiesByState(state: string) {

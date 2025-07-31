@@ -191,12 +191,12 @@ export default function PaymentsManager() {
           .map((order: any) => ({
             id: order.payment.id || order.id,
             orderId: order.orderNumber,
-            customerName: order.shippingAddress?.fullName || 'Unknown',
-            customerEmail: order.shippingAddress?.email || 'unknown@email.com',
+            customerName: order.shippingAddress?.fullName || "Unknown",
+            customerEmail: order.shippingAddress?.email || "unknown@email.com",
             amount: order.totalAmount,
             status: order.payment.status,
             paymentMethod: order.payment.method,
-            gateway: order.payment.gateway || 'Razorpay',
+            gateway: order.payment.gateway || "Razorpay",
             transactionId: order.payment.transactionId,
             razorpayPaymentId: order.payment.razorpayPaymentId,
             razorpayOrderId: order.payment.razorpayOrderId,
@@ -216,12 +216,13 @@ export default function PaymentsManager() {
         setPayments(mockPayments);
         toast({
           title: "Warning",
-          description: "Using sample data. Connect to backend for real payment data.",
+          description:
+            "Using sample data. Connect to backend for real payment data.",
           variant: "default",
         });
       }
     } catch (error) {
-      console.error('Failed to load payments:', error);
+      console.error("Failed to load payments:", error);
       setPayments(mockPayments);
       toast({
         title: "Backend Connection Failed",

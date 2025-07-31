@@ -335,20 +335,25 @@ export default function ShippingManager() {
             id: order.id,
             orderId: order.orderNumber,
             awbNumber: order.delivery.trackingNumber,
-            customerName: order.shippingAddress?.fullName || 'Unknown',
-            customerPhone: order.shippingAddress?.phone || '',
+            customerName: order.shippingAddress?.fullName || "Unknown",
+            customerPhone: order.shippingAddress?.phone || "",
             shippingAddress: {
-              street: order.shippingAddress?.street || '',
-              city: order.shippingAddress?.city || '',
-              state: order.shippingAddress?.state || '',
-              pincode: order.shippingAddress?.pincode || '',
+              street: order.shippingAddress?.street || "",
+              city: order.shippingAddress?.city || "",
+              state: order.shippingAddress?.state || "",
+              pincode: order.shippingAddress?.pincode || "",
             },
-            courierPartner: order.delivery.courierPartner || 'Shiprocket',
-            status: order.delivery.status || 'pending',
+            courierPartner: order.delivery.courierPartner || "Shiprocket",
+            status: order.delivery.status || "pending",
             weight: order.delivery.weight || 0.5,
-            dimensions: order.delivery.dimensions || { length: 20, width: 15, height: 3 },
+            dimensions: order.delivery.dimensions || {
+              length: 20,
+              width: 15,
+              height: 3,
+            },
             shippingCost: order.delivery.shippingCost || 0,
-            codAmount: order.payment?.method === 'cod' ? order.totalAmount : undefined,
+            codAmount:
+              order.payment?.method === "cod" ? order.totalAmount : undefined,
             createdAt: order.createdAt,
             pickupDate: order.delivery.pickupDate,
             deliveryDate: order.delivery.deliveryDate,
@@ -362,12 +367,13 @@ export default function ShippingManager() {
         setShipments(mockShipments);
         toast({
           title: "Warning",
-          description: "Using sample data. Connect to backend for real shipping data.",
+          description:
+            "Using sample data. Connect to backend for real shipping data.",
           variant: "default",
         });
       }
     } catch (error) {
-      console.error('Failed to load shipments:', error);
+      console.error("Failed to load shipments:", error);
       setShipments(mockShipments);
       toast({
         title: "Backend Connection Failed",
@@ -441,16 +447,22 @@ export default function ShippingManager() {
       const promises = shipments.map(async (shipment) => {
         if (shipment.awbNumber) {
           try {
-            const trackingResponse = await apiClient.trackShipment(shipment.awbNumber);
+            const trackingResponse = await apiClient.trackShipment(
+              shipment.awbNumber,
+            );
             if (trackingResponse.success && trackingResponse.data) {
               return {
                 ...shipment,
                 status: trackingResponse.data.status,
-                trackingEvents: trackingResponse.data.history || shipment.trackingEvents,
+                trackingEvents:
+                  trackingResponse.data.history || shipment.trackingEvents,
               };
             }
           } catch (error) {
-            console.error(`Failed to track shipment ${shipment.awbNumber}:`, error);
+            console.error(
+              `Failed to track shipment ${shipment.awbNumber}:`,
+              error,
+            );
           }
         }
         return shipment;

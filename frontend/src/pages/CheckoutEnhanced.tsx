@@ -307,9 +307,9 @@ export default function CheckoutEnhanced() {
         })),
         shippingAddress: address,
         notes: {
-          source: 'web',
-          step: 'checkout'
-        }
+          source: "web",
+          step: "checkout",
+        },
       });
 
       if (!orderResponse.success || !orderResponse.data) {
@@ -375,7 +375,9 @@ export default function CheckoutEnhanced() {
               clearCart();
 
               // Redirect to success page
-              navigate(`/order-success/${verifyData.data?.order?.id || orderData.orderId}`);
+              navigate(
+                `/order-success/${verifyData.data?.order?.id || orderData.orderId}`,
+              );
             } else {
               throw new Error(
                 verifyData.message || "Payment verification failed",

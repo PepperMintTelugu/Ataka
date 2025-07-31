@@ -200,15 +200,17 @@ export function useCart() {
     // Sync with backend if user is logged in
     if (state.user) {
       try {
-        await apiClient.saveCart(state.cart.map(item => ({
-          bookId: item.book.id,
-          quantity: item.quantity,
-          price: item.book.price,
-          title: item.book.title,
-          image: item.book.coverImage
-        })));
+        await apiClient.saveCart(
+          state.cart.map((item) => ({
+            bookId: item.book.id,
+            quantity: item.quantity,
+            price: item.book.price,
+            title: item.book.title,
+            image: item.book.coverImage,
+          })),
+        );
       } catch (error) {
-        console.error('Failed to sync cart with backend:', error);
+        console.error("Failed to sync cart with backend:", error);
       }
     }
   };
@@ -219,16 +221,20 @@ export function useCart() {
     // Sync with backend if user is logged in
     if (state.user) {
       try {
-        const updatedCart = state.cart.filter(item => item.book.id !== bookId);
-        await apiClient.saveCart(updatedCart.map(item => ({
-          bookId: item.book.id,
-          quantity: item.quantity,
-          price: item.book.price,
-          title: item.book.title,
-          image: item.book.coverImage
-        })));
+        const updatedCart = state.cart.filter(
+          (item) => item.book.id !== bookId,
+        );
+        await apiClient.saveCart(
+          updatedCart.map((item) => ({
+            bookId: item.book.id,
+            quantity: item.quantity,
+            price: item.book.price,
+            title: item.book.title,
+            image: item.book.coverImage,
+          })),
+        );
       } catch (error) {
-        console.error('Failed to sync cart with backend:', error);
+        console.error("Failed to sync cart with backend:", error);
       }
     }
   };
@@ -239,19 +245,23 @@ export function useCart() {
     // Sync with backend if user is logged in
     if (state.user) {
       try {
-        const updatedCart = state.cart.map(item =>
-          item.book.id === bookId ? { ...item, quantity } : item
-        ).filter(item => item.quantity > 0);
+        const updatedCart = state.cart
+          .map((item) =>
+            item.book.id === bookId ? { ...item, quantity } : item,
+          )
+          .filter((item) => item.quantity > 0);
 
-        await apiClient.saveCart(updatedCart.map(item => ({
-          bookId: item.book.id,
-          quantity: item.quantity,
-          price: item.book.price,
-          title: item.book.title,
-          image: item.book.coverImage
-        })));
+        await apiClient.saveCart(
+          updatedCart.map((item) => ({
+            bookId: item.book.id,
+            quantity: item.quantity,
+            price: item.book.price,
+            title: item.book.title,
+            image: item.book.coverImage,
+          })),
+        );
       } catch (error) {
-        console.error('Failed to sync cart with backend:', error);
+        console.error("Failed to sync cart with backend:", error);
       }
     }
   };
@@ -264,7 +274,7 @@ export function useCart() {
       try {
         await apiClient.saveCart([]);
       } catch (error) {
-        console.error('Failed to clear cart on backend:', error);
+        console.error("Failed to clear cart on backend:", error);
       }
     }
   };
@@ -273,13 +283,15 @@ export function useCart() {
     if (!state.user) return;
 
     try {
-      const response = await apiClient.syncCart(state.cart.map(item => ({
-        bookId: item.book.id,
-        quantity: item.quantity,
-        price: item.book.price,
-        title: item.book.title,
-        image: item.book.coverImage
-      })));
+      const response = await apiClient.syncCart(
+        state.cart.map((item) => ({
+          bookId: item.book.id,
+          quantity: item.quantity,
+          price: item.book.price,
+          title: item.book.title,
+          image: item.book.coverImage,
+        })),
+      );
 
       if (response.success && response.data) {
         // Transform backend cart data to local format
@@ -292,13 +304,13 @@ export function useCart() {
             // Add other required book properties
           },
           quantity: item.quantity,
-          addedAt: new Date()
+          addedAt: new Date(),
         }));
 
         dispatch({ type: "SYNC_CART", payload: syncedCart });
       }
     } catch (error) {
-      console.error('Failed to sync cart:', error);
+      console.error("Failed to sync cart:", error);
     }
   };
 

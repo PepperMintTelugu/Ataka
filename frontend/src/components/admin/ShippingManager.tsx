@@ -33,6 +33,8 @@ import {
   Phone,
   Mail,
 } from "lucide-react";
+import { apiClient } from "@/lib/api";
+import { useToast } from "@/hooks/use-toast";
 
 interface Shipment {
   id: string;

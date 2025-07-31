@@ -61,6 +61,7 @@ export default function Login() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { settings } = useTheme();
+  const { login: adminLogin } = useAdminAuth();
 
   // Fetch signin settings from backend
   useEffect(() => {

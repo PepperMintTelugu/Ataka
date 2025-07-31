@@ -47,6 +47,7 @@ export default function BookDetails() {
   const book = id ? getBookById(id) : null;
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { scrollDirection, isScrolled } = useScrollDirection(100);
 
   if (!book) {
     return <Navigate to="/404" replace />;

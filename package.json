@@ -1,0 +1,48 @@
+{
+  "name": "ataka-platform",
+  "version": "1.0.0",
+  "description": "Ataka - The Ultimate Bookstore - Complete online bookstore for Telugu literature with separate frontend and backend",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "install:all": "npm install && npm install --workspace=frontend",
+    "dev": "npm run dev --workspace=frontend",
+    "build": "npm run build --workspace=frontend",
+    "build:prod": "npm run build:prod --workspace=frontend",
+    "start": "npm run preview --workspace=frontend",
+    "test": "npm run test --workspace=frontend",
+    "lint": "npm run lint --workspace=frontend",
+    "format": "npm run format --workspace=frontend",
+    "typecheck": "npm run typecheck --workspace=frontend",
+    "clean": "rm -rf frontend/node_modules frontend/dist",
+    "deploy:build": "npm run build:prod --workspace=frontend"
+  },
+  "keywords": [
+    "telugu",
+    "books",
+    "ecommerce",
+    "literature",
+    "online-store",
+    "react",
+    "typescript",
+    "nodejs",
+    "mongodb",
+    "express"
+  ],
+  "author": "Telugu Books Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "your-repository-url"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

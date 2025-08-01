@@ -1,0 +1,83 @@
+{
+  "version": "1.0",
+  "projectId": "ataka-bookstore",
+  "deployment": {
+    "type": "fullstack",
+    "description": "Ataka Bookstore - Complete deployment on Appwrite",
+    "platform": "web"
+  },
+  "build": {
+    "commands": [
+      "cd frontend && npm ci --production=false",
+      "cd frontend && npm run build"
+    ],
+    "outputDirectory": "frontend/dist",
+    "nodeVersion": "18",
+    "environment": {
+      "VITE_APPWRITE_ENDPOINT": "https://cloud.appwrite.io/v1",
+      "VITE_APPWRITE_PROJECT_ID": "ataka-bookstore"
+    }
+  },
+  "functions": {
+    "buildCommands": [
+      "cd appwrite-functions/books-api && npm ci --production",
+      "cd appwrite-functions/orders-api && npm ci --production",
+      "cd appwrite-functions/payment-razorpay && npm ci --production",
+      "cd appwrite-functions/import-woocommerce && npm ci --production"
+    ],
+    "runtime": "node-18.0"
+  },
+  "hosting": {
+    "source": "./frontend/dist",
+    "fallback": "index.html",
+    "headers": [
+      {
+        "source": "**/*",
+        "headers": [
+          {
+            "key": "X-Content-Type-Options",
+            "value": "nosniff"
+          },
+          {
+            "key": "X-Frame-Options",
+            "value": "DENY"
+          },
+          {
+            "key": "X-XSS-Protection",
+            "value": "1; mode=block"
+          },
+          {
+            "key": "Referrer-Policy",
+            "value": "strict-origin-when-cross-origin"
+          }
+        ]
+      },
+      {
+        "source": "/assets/**/*",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      }
+    ],
+    "routes": [
+      {
+        "source": "/",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/(.*)",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "environment": {
+    "production": {
+      "VITE_APPWRITE_ENDPOINT": "https://cloud.appwrite.io/v1",
+      "VITE_APPWRITE_PROJECT_ID": "ataka-bookstore",
+      "NODE_ENV": "production"
+    }
+  }
+}

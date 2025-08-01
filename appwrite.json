@@ -1,0 +1,652 @@
+{
+  "projectId": "ataka-bookstore",
+  "projectName": "Ataka - Telugu Bookstore",
+  "databases": [
+    {
+      "databaseId": "ataka_db",
+      "name": "Ataka Database",
+      "collections": [
+        {
+          "collectionId": "users",
+          "name": "Users",
+          "permissions": {
+            "read": ["users"],
+            "write": ["users"],
+            "create": ["users"],
+            "update": ["users"],
+            "delete": ["admins"]
+          },
+          "attributes": [
+            {
+              "key": "name",
+              "type": "string",
+              "size": 100,
+              "required": true
+            },
+            {
+              "key": "email",
+              "type": "email",
+              "required": false
+            },
+            {
+              "key": "phoneNumber",
+              "type": "string",
+              "size": 15,
+              "required": false
+            },
+            {
+              "key": "avatar",
+              "type": "url",
+              "required": false
+            },
+            {
+              "key": "role",
+              "type": "string",
+              "size": 20,
+              "default": "user",
+              "required": true
+            },
+            {
+              "key": "isEmailVerified",
+              "type": "boolean",
+              "default": false,
+              "required": true
+            },
+            {
+              "key": "isPhoneVerified",
+              "type": "boolean",
+              "default": false,
+              "required": true
+            },
+            {
+              "key": "addresses",
+              "type": "string",
+              "size": 10000,
+              "required": false
+            },
+            {
+              "key": "wishlist",
+              "type": "string",
+              "size": 5000,
+              "required": false
+            },
+            {
+              "key": "lastLogin",
+              "type": "datetime",
+              "required": false
+            },
+            {
+              "key": "isActive",
+              "type": "boolean",
+              "default": true,
+              "required": true
+            }
+          ],
+          "indexes": [
+            {
+              "key": "email_index",
+              "type": "key",
+              "attributes": ["email"]
+            },
+            {
+              "key": "phone_index",
+              "type": "key",
+              "attributes": ["phoneNumber"]
+            }
+          ]
+        },
+        {
+          "collectionId": "books",
+          "name": "Books",
+          "permissions": {
+            "read": ["any"],
+            "write": ["admins"],
+            "create": ["admins"],
+            "update": ["admins"],
+            "delete": ["admins"]
+          },
+          "attributes": [
+            {
+              "key": "title",
+              "type": "string",
+              "size": 200,
+              "required": true
+            },
+            {
+              "key": "titleTelugu",
+              "type": "string",
+              "size": 200,
+              "required": false
+            },
+            {
+              "key": "author",
+              "type": "string",
+              "size": 100,
+              "required": true
+            },
+            {
+              "key": "authorTelugu",
+              "type": "string",
+              "size": 100,
+              "required": false
+            },
+            {
+              "key": "publisher",
+              "type": "string",
+              "size": 100,
+              "required": true
+            },
+            {
+              "key": "publisherTelugu",
+              "type": "string",
+              "size": 100,
+              "required": false
+            },
+            {
+              "key": "isbn",
+              "type": "string",
+              "size": 20,
+              "required": true
+            },
+            {
+              "key": "price",
+              "type": "double",
+              "required": true
+            },
+            {
+              "key": "originalPrice",
+              "type": "double",
+              "required": false
+            },
+            {
+              "key": "discount",
+              "type": "double",
+              "required": false
+            },
+            {
+              "key": "description",
+              "type": "string",
+              "size": 2000,
+              "required": true
+            },
+            {
+              "key": "descriptionTelugu",
+              "type": "string",
+              "size": 2000,
+              "required": false
+            },
+            {
+              "key": "image",
+              "type": "url",
+              "required": true
+            },
+            {
+              "key": "images",
+              "type": "string",
+              "size": 2000,
+              "required": false
+            },
+            {
+              "key": "category",
+              "type": "string",
+              "size": 50,
+              "required": true
+            },
+            {
+              "key": "categoryTelugu",
+              "type": "string",
+              "size": 50,
+              "required": false
+            },
+            {
+              "key": "pages",
+              "type": "integer",
+              "required": true
+            },
+            {
+              "key": "language",
+              "type": "string",
+              "size": 20,
+              "required": true
+            },
+            {
+              "key": "dimensions",
+              "type": "string",
+              "size": 200,
+              "required": false
+            },
+            {
+              "key": "weight",
+              "type": "double",
+              "required": true
+            },
+            {
+              "key": "publicationYear",
+              "type": "integer",
+              "required": true
+            },
+            {
+              "key": "rating",
+              "type": "double",
+              "default": 0,
+              "required": true
+            },
+            {
+              "key": "reviewCount",
+              "type": "integer",
+              "default": 0,
+              "required": true
+            },
+            {
+              "key": "reviews",
+              "type": "string",
+              "size": 10000,
+              "required": false
+            },
+            {
+              "key": "inStock",
+              "type": "boolean",
+              "default": true,
+              "required": true
+            },
+            {
+              "key": "stockCount",
+              "type": "integer",
+              "required": true
+            },
+            {
+              "key": "tags",
+              "type": "string",
+              "size": 500,
+              "required": false
+            },
+            {
+              "key": "featured",
+              "type": "boolean",
+              "default": false,
+              "required": true
+            },
+            {
+              "key": "bestseller",
+              "type": "boolean",
+              "default": false,
+              "required": true
+            },
+            {
+              "key": "newArrival",
+              "type": "boolean",
+              "default": false,
+              "required": true
+            },
+            {
+              "key": "salesCount",
+              "type": "integer",
+              "default": 0,
+              "required": true
+            },
+            {
+              "key": "isActive",
+              "type": "boolean",
+              "default": true,
+              "required": true
+            },
+            {
+              "key": "createdBy",
+              "type": "string",
+              "size": 50,
+              "required": true
+            },
+            {
+              "key": "woocommerceId",
+              "type": "integer",
+              "required": false
+            },
+            {
+              "key": "importSource",
+              "type": "string",
+              "size": 20,
+              "default": "manual",
+              "required": true
+            },
+            {
+              "key": "importDate",
+              "type": "datetime",
+              "required": false
+            }
+          ],
+          "indexes": [
+            {
+              "key": "title_search",
+              "type": "fulltext",
+              "attributes": ["title", "author", "description"]
+            },
+            {
+              "key": "category_index",
+              "type": "key",
+              "attributes": ["category"]
+            },
+            {
+              "key": "featured_index",
+              "type": "key",
+              "attributes": ["featured"]
+            },
+            {
+              "key": "bestseller_index",
+              "type": "key",
+              "attributes": ["bestseller"]
+            }
+          ]
+        },
+        {
+          "collectionId": "orders",
+          "name": "Orders",
+          "permissions": {
+            "read": ["users"],
+            "write": ["users"],
+            "create": ["users"],
+            "update": ["users", "admins"],
+            "delete": ["admins"]
+          },
+          "attributes": [
+            {
+              "key": "orderNumber",
+              "type": "string",
+              "size": 50,
+              "required": true
+            },
+            {
+              "key": "userId",
+              "type": "string",
+              "size": 50,
+              "required": true
+            },
+            {
+              "key": "items",
+              "type": "string",
+              "size": 10000,
+              "required": true
+            },
+            {
+              "key": "shippingAddress",
+              "type": "string",
+              "size": 1000,
+              "required": true
+            },
+            {
+              "key": "billingAddress",
+              "type": "string",
+              "size": 1000,
+              "required": false
+            },
+            {
+              "key": "orderSummary",
+              "type": "string",
+              "size": 500,
+              "required": true
+            },
+            {
+              "key": "paymentDetails",
+              "type": "string",
+              "size": 1000,
+              "required": true
+            },
+            {
+              "key": "orderStatus",
+              "type": "string",
+              "size": 30,
+              "default": "pending",
+              "required": true
+            },
+            {
+              "key": "shippingDetails",
+              "type": "string",
+              "size": 1000,
+              "required": false
+            },
+            {
+              "key": "timeline",
+              "type": "string",
+              "size": 5000,
+              "required": false
+            },
+            {
+              "key": "customerNotes",
+              "type": "string",
+              "size": 500,
+              "required": false
+            },
+            {
+              "key": "adminNotes",
+              "type": "string",
+              "size": 500,
+              "required": false
+            },
+            {
+              "key": "isGift",
+              "type": "boolean",
+              "default": false,
+              "required": true
+            },
+            {
+              "key": "giftMessage",
+              "type": "string",
+              "size": 200,
+              "required": false
+            }
+          ],
+          "indexes": [
+            {
+              "key": "user_orders",
+              "type": "key",
+              "attributes": ["userId"]
+            },
+            {
+              "key": "order_status",
+              "type": "key",
+              "attributes": ["orderStatus"]
+            }
+          ]
+        },
+        {
+          "collectionId": "settings",
+          "name": "Settings",
+          "permissions": {
+            "read": ["admins"],
+            "write": ["admins"],
+            "create": ["admins"],
+            "update": ["admins"],
+            "delete": ["admins"]
+          },
+          "attributes": [
+            {
+              "key": "key",
+              "type": "string",
+              "size": 100,
+              "required": true
+            },
+            {
+              "key": "value",
+              "type": "string",
+              "size": 5000,
+              "required": true
+            },
+            {
+              "key": "type",
+              "type": "string",
+              "size": 20,
+              "required": true
+            },
+            {
+              "key": "description",
+              "type": "string",
+              "size": 200,
+              "required": false
+            }
+          ]
+        },
+        {
+          "collectionId": "homepage",
+          "name": "Homepage",
+          "permissions": {
+            "read": ["any"],
+            "write": ["admins"],
+            "create": ["admins"],
+            "update": ["admins"],
+            "delete": ["admins"]
+          },
+          "attributes": [
+            {
+              "key": "section",
+              "type": "string",
+              "size": 50,
+              "required": true
+            },
+            {
+              "key": "title",
+              "type": "string",
+              "size": 200,
+              "required": false
+            },
+            {
+              "key": "content",
+              "type": "string",
+              "size": 10000,
+              "required": true
+            },
+            {
+              "key": "isActive",
+              "type": "boolean",
+              "default": true,
+              "required": true
+            },
+            {
+              "key": "order",
+              "type": "integer",
+              "default": 0,
+              "required": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "functionId": "auth-middleware",
+      "name": "Auth Middleware",
+      "runtime": "node-18.0",
+      "execute": ["any"],
+      "events": []
+    },
+    {
+      "functionId": "books-api",
+      "name": "Books API",
+      "runtime": "node-18.0",
+      "execute": ["any"],
+      "events": [],
+      "path": "appwrite-functions/books-api",
+      "entrypoint": "src/main.js"
+    },
+    {
+      "functionId": "orders-api",
+      "name": "Orders API",
+      "runtime": "node-18.0",
+      "execute": ["users"],
+      "events": [],
+      "path": "appwrite-functions/orders-api",
+      "entrypoint": "src/main.js"
+    },
+    {
+      "functionId": "payment-razorpay",
+      "name": "Razorpay Payment Handler",
+      "runtime": "node-18.0",
+      "execute": ["users"],
+      "events": [],
+      "path": "appwrite-functions/payment-razorpay",
+      "entrypoint": "src/main.js"
+    },
+    {
+      "functionId": "delivery-shiprocket",
+      "name": "Shiprocket Delivery Handler",
+      "runtime": "node-18.0",
+      "execute": ["admins"],
+      "events": []
+    },
+    {
+      "functionId": "import-woocommerce",
+      "name": "WooCommerce Import Handler",
+      "runtime": "node-18.0",
+      "execute": ["admins"],
+      "events": [],
+      "path": "appwrite-functions/import-woocommerce",
+      "entrypoint": "src/main.js"
+    },
+    {
+      "functionId": "order-processor",
+      "name": "Order Processing",
+      "runtime": "node-18.0",
+      "execute": ["users"],
+      "events": []
+    }
+  ],
+  "hosting": {
+    "source": "./frontend/dist",
+    "fallback": "index.html"
+  },
+  "buckets": [
+    {
+      "bucketId": "book-images",
+      "name": "Book Images",
+      "permissions": {
+        "read": ["any"],
+        "write": ["admins"],
+        "create": ["admins"],
+        "update": ["admins"],
+        "delete": ["admins"]
+      },
+      "fileSecurity": true,
+      "enabled": true,
+      "maximumFileSize": 10485760,
+      "allowedFileExtensions": ["jpg", "jpeg", "png", "webp"],
+      "compression": "gzip",
+      "encryption": true,
+      "antivirus": true
+    },
+    {
+      "bucketId": "user-avatars",
+      "name": "User Avatars",
+      "permissions": {
+        "read": ["any"],
+        "write": ["users"],
+        "create": ["users"],
+        "update": ["users"],
+        "delete": ["users"]
+      },
+      "fileSecurity": true,
+      "enabled": true,
+      "maximumFileSize": 5242880,
+      "allowedFileExtensions": ["jpg", "jpeg", "png"],
+      "compression": "gzip",
+      "encryption": true,
+      "antivirus": true
+    },
+    {
+      "bucketId": "documents",
+      "name": "Documents",
+      "permissions": {
+        "read": ["admins"],
+        "write": ["admins"],
+        "create": ["admins"],
+        "update": ["admins"],
+        "delete": ["admins"]
+      },
+      "fileSecurity": true,
+      "enabled": true,
+      "maximumFileSize": 52428800,
+      "allowedFileExtensions": ["pdf", "doc", "docx", "csv", "xlsx"],
+      "compression": "gzip",
+      "encryption": true,
+      "antivirus": true
+    }
+  ]
+}
